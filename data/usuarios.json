@@ -1,0 +1,14 @@
+[
+  {
+    "id": "user_65f1a2b3c4d5e",
+    "nome": "Usuário Teste 01",
+    "email": "teste01@exemplo.com.br",
+    "senha": "PoderLobo123"
+  },
+  {
+    "id": "user_76g2b3c4d5e6f",
+    "nome": "Crítico de Cinema",
+    "email": "critico@ponto-critico.com",
+    "senha": "1234567"
+  }
+]
