@@ -11,7 +11,17 @@ class AuthController {
             $senha = $_POST['senha'];
 
             $userModel = new Usuario();
-            if ($userModel->cadastrar($nome, $email, $senha)) {
+
+
+            $dadosParaSalvar = [
+                'nome' => $nome,
+                'email' => $email,
+                'senha' => $senha
+            ];
+
+
+
+            if ($userModel->salvar($dadosParaSalvar)) {
                 header('Location: index.php?url=login&sucesso=1');
             } else {
                 echo "Erro: E-mail já cadastrado!";
