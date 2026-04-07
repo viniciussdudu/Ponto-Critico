@@ -9,7 +9,7 @@ class Usuario {
     public function salvar($dados) {
         $usuarios = $this->listarTodos();
         if (!isset($dados['id'])) {
-            $dados['id'] = uniqid('user_'); // Gera ID único para evitar conflitos
+            $dados['id'] = uniqid('user_'); 
             $dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
             $usuarios[] = $dados;
         } else {
