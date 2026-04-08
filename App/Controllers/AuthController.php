@@ -28,6 +28,7 @@ class AuthController {
             }
         }
     }
+  
     public function redefinirSenha() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];

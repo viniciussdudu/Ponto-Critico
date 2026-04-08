@@ -116,4 +116,3 @@ switch ($rota) {
         http_response_code(404);
         echo "<h1>404 - Página não encontrada</h1>";
         break;
-}
