@@ -93,9 +93,26 @@ switch ($rota) {
         $controller->salvar();
         break;
 
+    case 'recuperar-senha':
+        // 1. Rota para exibir o formulário
+        require_once __DIR__ . '/../App/Views/Recuperar-senha.php';
+        break;
+
+    case 'auth/redefinir-senha':
+        // 2. Rota que processa o formulário (o action do seu form)
+        $controller = new \App\Controllers\AuthController();
+        $controller->redefinirSenha();
+        break;
+
+    case 'redefinir':
+        // 3. Tela de sucesso (conforme seu requisito)
+        echo "<h1>E-mail validado!</h1>";
+        echo "<p>O fluxo para redefinir a senha seria iniciado aqui.</p>";
+        echo "<a href='index.php?url=login'>Voltar para o Login</a>";
+        break;
+
     default:
         // Página 404
         http_response_code(404);
         echo "<h1>404 - Página não encontrada</h1>";
         break;
-}

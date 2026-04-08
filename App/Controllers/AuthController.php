@@ -28,4 +28,17 @@ class AuthController {
             }
         }
     }
+  
+    public function redefinirSenha() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'];
+            $userModel = new Usuario();
+
+            if ($userModel->buscarPorEmail($email)) {
+                header('Location: index.php?url=redefinir&sucesso=1');
+            } else {
+                header('Location: index.php?url=recuperar-senha&erro=usuario_nao_encontrado');
+            }
+        }
+    }
 }
