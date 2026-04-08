@@ -20,6 +20,10 @@ switch ($rota) {
         // Exibe a lista de mídias
         $controller = new \App\Controllers\MidiaController();
         $midias = $controller->obterMidias();
+        //Busca as avaliações
+        $avModel = new \App\Models\AvaliacaoModel();
+        $avaliacoes = $avModel->obterAvaliacoesCompletas();
+
         echo "<h1>Bem-vindo ao Ponto Crítico!</h1>";
         echo "<a href='index.php?url=midia/criar'>Cadastrar Nova Mídia</a>";
         
@@ -36,6 +40,22 @@ switch ($rota) {
             echo "</ul>";
         } else {
             echo "<p>Nenhuma mídia cadastrada ainda.</p>";
+        }
+
+        echo "<hr><h2>Avaliações Recentes:</h2>";
+        if (!empty($avaliacoes)) {
+            echo "<ul>";
+            foreach ($avaliacoes as $av) {
+                echo "<li style='margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;'>";
+                echo "<strong>" . htmlspecialchars($av['nome_usuario']) . "</strong> avaliou ";
+                echo "<strong>" . htmlspecialchars($av['titulo_midia']) . "</strong><br>";
+                echo "<span>Nota: " . str_repeat("⭐", $av['nota']) . " (" . $av['nota'] . "/5)</span><br>";
+                echo "<em>\"" . htmlspecialchars($av['comentario']) . "\"</em>";
+                echo "</li>";
+            }
+            echo "</ul>";
+        } else {
+            echo "<p>Nenhuma avaliação encontrada.</p>";
         }
         break;
 
