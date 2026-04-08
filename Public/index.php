@@ -17,8 +17,26 @@ $rota = $_GET['url'] ?? 'home';
 // 4. O Roteador Principal
 switch ($rota) {
     case 'home':
-        // Aqui chamaria o Controller da Home (Arthur)
-        echo "<h1>Bem-vindo ao Ponto Crítico!</h1><p>Em breve: Lista de mídias.</p>";
+        // Exibe a lista de mídias
+        $controller = new \App\Controllers\MidiaController();
+        $midias = $controller->obterMidias();
+        echo "<h1>Bem-vindo ao Ponto Crítico!</h1>";
+        echo "<a href='index.php?url=midia/criar'>Cadastrar Nova Mídia</a>";
+        
+        if (!empty($midias)) {
+            echo "<h2>Mídias Cadastradas:</h2>";
+            echo "<ul>";
+            foreach ($midias as $midia) {
+                echo "<li>";
+                echo "<strong>" . htmlspecialchars($midia['titulo']) . "</strong> - ";
+                echo htmlspecialchars($midia['tipo']) . " - ";
+                echo htmlspecialchars($midia['genero']);
+                echo "</li>";
+            }
+            echo "</ul>";
+        } else {
+            echo "<p>Nenhuma mídia cadastrada ainda.</p>";
+        }
         break;
 
     case 'login':
@@ -41,6 +59,18 @@ switch ($rota) {
         // Rota que processa o formulário de login
         $controller = new \App\Controllers\AuthController();
         $controller->logar();
+        break;
+
+    case 'midia/criar':
+        // Rota que exibe o formulário de cadastro de mídia
+        $controller = new \App\Controllers\MidiaController();
+        $controller->criar();
+        break;
+
+    case 'midia/salvar':
+        // Rota que processa o formulário de cadastro de mídia
+        $controller = new \App\Controllers\MidiaController();
+        $controller->salvar();
         break;
 
     default:
