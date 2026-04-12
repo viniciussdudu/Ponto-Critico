@@ -2,66 +2,59 @@
 
 namespace App\Controllers;
 
-use App\Models\AvaliacaoModel;
-
-class AvaliacaoController {
-    private $model;
-
-    public function __construct() {
-        $this->model = new AvaliacaoModel();
-    }
-
-    public function listar() {
-        $avaliacoes = $this->model->obterAvaliacoesComMidia();
-
-        require_once __DIR__ . '/../Views/listar_avaliacoes.php';
-
-namespace App\Controllers;
-
-use App\Models\Avaliacao;
-use App\Models\Midia;
+// CORREÇÃO: Importando os nomes exatos das classes dos seus Models
+use App\Models\AvaliacaoModel; 
+use App\Models\MidiaModel; 
 
 class AvaliacaoController
 {
     public function criar(): void
     {
-        $midiaModel = new Midia();
-        $midias = $midiaModel->listar();
+        // CORREÇÃO: Instanciando MidiaModel (o nome que está no seu arquivo)
+        $midiaModel = new MidiaModel();
+        
+        // CORREÇÃO: Chamando o método correto 'obterMidias'
+        $midias = $midiaModel->obterMidias(); 
 
-        require_once __DIR__ . '/../Views/nova-avaliacao.php';
+        // Carrega a sua View
+        require_once __DIR__ . '/../Views/avaliacao.php';
     }
 
     public function salvar(): void
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: index.php?url=home');
-            exit;
-        }
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: index.php?url=home');
+        exit;
+    }
 
-        $midiaId = isset($_POST['midia_id']) ? (int) $_POST['midia_id'] : 0;
-        $nota = isset($_POST['nota']) ? (int) $_POST['nota'] : 0;
-        $comentario = trim($_POST['comentario'] ?? '');
+    // 1. REMOVA o (int). Deixe como string para aceitar o "mid_..."
+    $midiaId = isset($_POST['midia_id']) ? $_POST['midia_id'] : '';
+    $nota    = isset($_POST['nota']) ? (int) $_POST['nota'] : 0;
+    $comentario = trim($_POST['comentario'] ?? '');
 
-        if ($midiaId <= 0 || $nota < 1 || $nota > 5 || empty($comentario)) {
-            echo "<h1>Erro ao salvar avaliação</h1>";
-            echo "<p>Preencha todos os campos corretamente.</p>";
-            echo "<a href='index.php?url=avaliacao/criar'>Voltar</a>";
-            return;
-        }
+    // 2. Ajuste a validação: verifique se o midiaId não está vazio
+    if (empty($midiaId) || $nota < 1 || $nota > 5 || empty($comentario)) {
+        header('Location: index.php?url=avaliar&erro=campos_invalidos');
+        exit;
+    }
 
-        $avaliacaoModel = new Avaliacao();
+        // Usando o nome correto aqui também
+        $avaliacaoModel = new AvaliacaoModel();
 
         $novaAvaliacao = [
-            'id' => time(),
-            'midia_id' => $midiaId,
-            'nota' => $nota,
-            'comentario' => $comentario,
-            'data' => date('Y-m-d H:i:s')
+            'id'           => time(),
+            'midia_id'     => $midiaId,
+            'usuario_id'   => $_SESSION['usuario_id'] ?? 0,
+            'nota'         => $nota,
+            'comentario'   => $comentario,
+            'data'         => date('d/m/Y H:i')
         ];
 
-        $avaliacaoModel->salvar($novaAvaliacao);
-
-        header('Location: index.php?url=home');
+        if ($avaliacaoModel->salvar($novaAvaliacao)) {
+            header('Location: index.php?url=home&sucesso=avaliacao');
+        } else {
+            echo "Erro crítico ao salvar no JSON.";
+        }
         exit;
     }
 }

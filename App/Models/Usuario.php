@@ -49,4 +49,21 @@ class Usuario {
     private function persistir($lista) {
         return file_put_contents($this->filePath, json_encode($lista, JSON_PRETTY_PRINT));
     }
+
+    public function atualizarSenha($email, $novaSenha) {
+    $usuarios = json_decode(file_get_contents(__DIR__ . '/../../data/usuarios.json'), true);
+    
+    foreach ($usuarios as &$usuario) {
+        if ($usuario['email'] === $email) {
+            // Criptografa a nova senha antes de salvar
+            $usuario['senha'] = password_hash($novaSenha, PASSWORD_DEFAULT);
+            
+            // Salva o array atualizado de volta no arquivo
+            file_put_contents(__DIR__ . '/../../data/usuarios.json', json_encode($usuarios, JSON_PRETTY_PRINT));
+            return true;
+        }
+    }
+    return false;
+}
+
 }
