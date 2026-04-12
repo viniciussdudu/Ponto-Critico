@@ -30,5 +30,21 @@
         "genero": "Ação",
         "data_lancamento": "2026-04-07",
         "sinopse": "aaaa"
+    },
+    {
+        "id": "mid_23d16ebf7de30b",
+        "titulo": "Jojo",
+        "tipo": "Série",
+        "genero": "Animação",
+        "data_lancamento": "2012-01-12",
+        "sinopse": "Uma aventura Bizarra"
+    },
+    {
+        "id": "mid_bcc377f0c962db",
+        "titulo": "Pecadores",
+        "tipo": "Filme",
+        "genero": "Terror",
+        "data_lancamento": "2025-04-17",
+        "sinopse": "Dois irmãos gêmeos tentam deixar suas vidas problemáticas para trás e retornam à sua cidade natal para recomeçar. Lá, eles descobrem que um mal ainda maior está à espreita para recebê-los de volta."
     }
 ]

@@ -1,118 +1,112 @@
 <?php
+session_start();
 
-// 1. Autoload simples (Para carregar as classes das pastas automaticamente)
-spl_autoload_register(function ($class_name) {
-    $file = __DIR__ . '/../' . str_replace('\\', '/', $class_name) . '.php';
-    if (file_exists($file)) {
-        require_once $file;
+spl_autoload_register(function ($class) {
+    $path = __DIR__ . '/../' . str_replace('\\', '/', $class) . '.php';
+    if (file_exists($path)) {
+        require_once $path;
     }
 });
 
-// 2. Iniciar Sessão (Essencial para Login - RF01)
-session_start();
+$url = $_GET['url'] ?? 'home';
 
-// 3. Capturar a rota da URL (Se não houver, vai para a 'home')
-$rota = $_GET['url'] ?? 'home';
+// 1. PRIMEIRO O ROTEADOR (Lógica de processamento)
+// Se houver um header() lá dentro, ele será executado antes de qualquer HTML
+ob_start(); // Dica extra: Inicia o buffer de saída para evitar erros de cabeçalho
 
-// 4. O Roteador Principal
-switch ($rota) {
-    case 'home':
-        // Exibe a lista de mídias
-        $controller = new \App\Controllers\MidiaController();
-        $midias = $controller->obterMidias();
-        //Busca as avaliações
-        $avModel = new \App\Models\AvaliacaoModel();
-        $avaliacoes = $avModel->obterAvaliacoesCompletas();
-
-        echo "<h1>Bem-vindo ao Ponto Crítico!</h1>";
-        echo "<a href='index.php?url=midia/criar'>Cadastrar Nova Mídia</a>";
-        
-        if (!empty($midias)) {
-            echo "<h2>Mídias Cadastradas:</h2>";
-            echo "<ul>";
-            foreach ($midias as $midia) {
-                echo "<li>";
-                echo "<strong>" . htmlspecialchars($midia['titulo']) . "</strong> - ";
-                echo htmlspecialchars($midia['tipo']) . " - ";
-                echo htmlspecialchars($midia['genero']);
-                echo "</li>";
-            }
-            echo "</ul>";
-        } else {
-            echo "<p>Nenhuma mídia cadastrada ainda.</p>";
-        }
-
-        echo "<hr><h2>Avaliações Recentes:</h2>";
-        if (!empty($avaliacoes)) {
-            echo "<ul>";
-            foreach ($avaliacoes as $av) {
-                echo "<li style='margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;'>";
-                echo "<strong>" . htmlspecialchars($av['nome_usuario']) . "</strong> avaliou ";
-                echo "<strong>" . htmlspecialchars($av['titulo_midia']) . "</strong><br>";
-                echo "<span>Nota: " . str_repeat("⭐", $av['nota']) . " (" . $av['nota'] . "/5)</span><br>";
-                echo "<em>\"" . htmlspecialchars($av['comentario']) . "\"</em>";
-                echo "</li>";
-            }
-            echo "</ul>";
-        } else {
-            echo "<p>Nenhuma avaliação encontrada.</p>";
-        }
-        break;
-
-    case 'login':
-        // Renderiza a view de login
-        require_once __DIR__ . '/../app/Views/login.php';
-        break;
-
-    case 'cadastro':
-        // Renderiza a view de cadastro
-        require_once __DIR__ . '/../app/Views/cadastro.php';
+switch ($url) {
+    case 'auth/login':
+        $controller = new \App\Controllers\AuthController();
+        $controller->login();
         break;
 
     case 'auth/registrar':
-        // Rota que processa o formulário de cadastro
         $controller = new \App\Controllers\AuthController();
         $controller->registrar();
         break;
 
-    case 'auth/logar':
-        // Rota que processa o formulário de login
+    case 'auth/logout':
         $controller = new \App\Controllers\AuthController();
-        $controller->logar();
+        $controller->logout();
         break;
+}
 
-    case 'midia/criar':
-        // Rota que exibe o formulário de cadastro de mídia
-        $controller = new \App\Controllers\MidiaController();
-        $controller->criar();
+// 2. DEPOIS O HTML (Menu e Views)
+?>
+<nav>
+    <a href="index.php?url=home">Home</a> | 
+    <?php if (isset($_SESSION['usuario_id'])): ?>
+        <span>Bem-vindo, <?= $_SESSION['usuario_nome'] ?>!</span> | 
+        <a href="index.php?url=auth/logout">Sair</a>
+    <?php else: ?>
+        <a href="index.php?url=login">Login</a> | 
+        <a href="index.php?url=cadastro">Cadastrar Conta</a>
+    <?php endif; ?>
+</nav>
+<hr>
+
+<?php
+// Roteador de Views (coisas que apenas exibem conteúdo)
+switch ($url) {
+    case 'home':
+    // 1. Instancia os Controllers/Models necessários
+    $midiaController = new \App\Controllers\MidiaController();
+    $avModel = new \App\Models\AvaliacaoModel();
+
+    // 2. Busca os dados (essas variáveis ficarão disponíveis no require_once abaixo)
+    $midias = $midiaController->obterMidias();
+    $avaliacoes = $avModel->obterAvaliacoesCompletas();
+
+    // 3. Chama a View
+    require_once __DIR__ . '/../app/Views/home.php';
+    break;
+
+    case 'cadastro':
+        require_once __DIR__ . '/../app/Views/cadastro.php';
         break;
-
-    case 'midia/salvar':
-        // Rota que processa o formulário de cadastro de mídia
-        $controller = new \App\Controllers\MidiaController();
-        $controller->salvar();
+    case 'login':
+        require_once __DIR__ . '/../app/Views/login.php';
         break;
-
+    
     case 'recuperar-senha':
-        // 1. Rota para exibir o formulário
-        require_once __DIR__ . '/../App/Views/Recuperar-senha.php';
+        require_once __DIR__ . '/../app/Views/Recuperar-senha.php';
         break;
 
     case 'auth/redefinir-senha':
-        // 2. Rota que processa o formulário (o action do seu form)
         $controller = new \App\Controllers\AuthController();
         $controller->redefinirSenha();
         break;
 
     case 'redefinir':
-        // 3. Tela de sucesso (conforme seu requisito)
-        echo "<h1>E-mail validado!</h1>";
-        echo "<p>O fluxo para redefinir a senha seria iniciado aqui.</p>";
-        echo "<a href='index.php?url=login'>Voltar para o Login</a>";
+    require_once __DIR__ . '/../app/Views/redefinir.php';
+    break;
+
+    case 'auth/confirmar-redefinicao':
+    $controller = new \App\Controllers\AuthController();
+    $controller->confirmarRedefinicao();
+    break;
+
+    case 'avaliar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->criar(); // Isso vai chamar o require_once para Views/avaliacao.php
+    break;
+
+    case 'avaliacao/salvar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->salvar();
         break;
 
-    default:
-        // Página 404
-        http_response_code(404);
-        echo "<h1>404 - Página não encontrada</h1>";
+
+    case 'cadastrar-midia':
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location: index.php?url=login&erro=restrito');
+            exit();
+        }
+        require_once __DIR__ . '/../app/Views/cadastro_midia.php';
         break;
+
+    case 'midia/salvar':
+        $controller = new \App\Controllers\MidiaController();
+        $controller->salvar();
+        break;
+}

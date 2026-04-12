@@ -1,49 +1,39 @@
-<?php
+<h2>Nova Avaliação</h2>
 
-namespace App\Models;
+<form action="index.php?url=avaliacao/salvar" method="POST">
+    
+    <label for="midia_id">Qual mídia você quer avaliar?</label><br>
+    <select name="midia_id" id="midia_id" required>
+        <option value="">-- Selecione uma mídia --</option>
+        
+        <?php if (!empty($midias)): ?>
+            <?php foreach ($midias as $midia): ?>
+                <option value="<?= $midia['id'] ?>">
+                    <?= htmlspecialchars($midia['titulo']) ?> (<?= htmlspecialchars($midia['tipo']) ?>)
+                </option>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <option value="" disabled>Nenhuma mídia cadastrada</option>
+        <?php endif; ?>
+    </select>
 
-class Avaliacao
-{
-    private string $arquivo;
+    <br><br>
 
-    public function __construct()
-    {
-        $this->arquivo = __DIR__ . '/../../data/avaliacoes.json';
+    <label>Sua Nota:</label><br>
+    <select name="nota" required>
+        <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+        <option value="4">⭐⭐⭐⭐ (4)</option>
+        <option value="3">⭐⭐⭐ (3)</option>
+        <option value="2">⭐⭐ (2)</option>
+        <option value="1">⭐ (1)</option>
+    </select>
 
-        if (!file_exists($this->arquivo)) {
-            file_put_contents($this->arquivo, json_encode([], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        }
-    }
+    <br><br>
 
-    public function salvar(array $avaliacao): bool
-    {
-        $avaliacoes = $this->listarTodas();
-        $avaliacoes[] = $avaliacao;
+    <label>Comentário:</label><br>
+    <textarea name="comentario" rows="4" cols="50" required placeholder="Escreva sua opinião..."></textarea>
 
-        return file_put_contents(
-            $this->arquivo,
-            json_encode($avaliacoes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        ) !== false;
-    }
-
-    public function listarTodas(): array
-    {
-        if (!file_exists($this->arquivo)) {
-            return [];
-        }
-
-        $conteudo = file_get_contents($this->arquivo);
-        $dados = json_decode($conteudo, true);
-
-        return is_array($dados) ? $dados : [];
-    }
-
-    public function listarPorMidiaId(int $midiaId): array
-    {
-        $avaliacoes = $this->listarTodas();
-
-        return array_values(array_filter($avaliacoes, function ($avaliacao) use ($midiaId) {
-            return isset($avaliacao['midia_id']) && (int)$avaliacao['midia_id'] === $midiaId;
-        }));
-    }
-}
+    <br><br>
+    <button type="submit">Enviar Avaliação</button>
+    <a href="index.php?url=home">Cancelar</a>
+</form>

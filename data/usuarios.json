@@ -28,5 +28,11 @@
         "email": "pablo@mail",
         "senha": "$2y$12$dSMSxTmqpfAv5m4KcTI.tuOcHYK5sVe.43t265RIQPhwXptw96B42",
         "id": "user_69d58ae287389"
+    },
+    {
+        "nome": "vinicius eduardo",
+        "email": "viniciuss@gmail",
+        "senha": "$2y$12$Go0sLJJdE5RPDCwTHwARy.9.9xyF7aK.wSYMU56qG\/MStYfoKGdTS",
+        "id": "user_69dbaee48fa3e"
     }
 ]
