@@ -35,6 +35,16 @@ class Usuario {
         }
         return null;
     }
+    //=============================buscar id
+    public function buscarPorId($id) {
+    $usuarios = $this->listarTodos();
+    foreach ($usuarios as $user) {
+        if ($user['id'] === $id) {
+            return $user;
+        }
+    }
+    return null;
+}
 
     //==========================Listar todos
     public function listarTodos() {

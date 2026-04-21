@@ -109,4 +109,16 @@ switch ($url) {
         $controller = new \App\Controllers\MidiaController();
         $controller->salvar();
         break;
+
+    // Rota para mostrar o formulário
+case 'perfil/editar':
+    $controller = new \App\Controllers\UsuarioController();
+    $controller->exibirEdicao();
+    break;
+
+// Rota para processar a alteração
+case 'perfil/atualizar':
+    $controller = new \App\Controllers\UsuarioController();
+    $controller->atualizar();
+    break;
 }
