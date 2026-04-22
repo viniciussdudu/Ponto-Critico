@@ -16,17 +16,19 @@ $rota = $_GET['url'] ?? 'home';
 
 // 4. O Roteador Principal
 switch ($rota) {
-    case 'home':
-        // Exibe a lista de mídias
+case 'home':
+        // 1. Busca os Dados
         $controller = new \App\Controllers\MidiaController();
         $midias = $controller->obterMidias();
-        //Busca as avaliações
+        
         $avModel = new \App\Models\AvaliacaoModel();
         $avaliacoes = $avModel->obterAvaliacoesCompletas();
 
+        // 2. Desenha o Cabeçalho
         echo "<h1>Bem-vindo ao Ponto Crítico!</h1>";
         echo "<a href='index.php?url=midia/criar'>Cadastrar Nova Mídia</a>";
         
+        // 3. Desenha a Lista de Mídias
         if (!empty($midias)) {
             echo "<h2>Mídias Cadastradas:</h2>";
             echo "<ul>";
@@ -42,6 +44,7 @@ switch ($rota) {
             echo "<p>Nenhuma mídia cadastrada ainda.</p>";
         }
 
+        // 4. Desenha a Lista de Avaliações (com botão Editar)
         echo "<hr><h2>Avaliações Recentes:</h2>";
         if (!empty($avaliacoes)) {
             echo "<ul>";
@@ -50,13 +53,28 @@ switch ($rota) {
                 echo "<strong>" . htmlspecialchars($av['nome_usuario']) . "</strong> avaliou ";
                 echo "<strong>" . htmlspecialchars($av['titulo_midia']) . "</strong><br>";
                 echo "<span>Nota: " . str_repeat("⭐", $av['nota']) . " (" . $av['nota'] . "/5)</span><br>";
-                echo "<em>\"" . htmlspecialchars($av['comentario']) . "\"</em>";
+                echo "<em>\"" . htmlspecialchars($av['comentario']) . "\"</em><br>";
+                
+                echo "<a href='index.php?url=avaliacao/editar&id=" . urlencode($av['id']) . "' style='font-size: 12px; color: blue; text-decoration: none;'>✏️ Editar</a>";
+                
                 echo "</li>";
             }
             echo "</ul>";
         } else {
             echo "<p>Nenhuma avaliação encontrada.</p>";
         }
+        
+        // 5. Encerra o caso da Home
+        break;
+
+    case 'avaliacao/editar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->editar();
+        break;
+
+    case 'avaliacao/atualizar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->atualizar();
         break;
 
     case 'login':

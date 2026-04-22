@@ -1,18 +1,18 @@
 [
-  {
-    "id": "rev_65f1a2b",
-    "usuario_id": "user_65f1a2b3c4d5e",
-    "midia_id": "mid_65f1a2b3c4d5e",
-    "nota": 5,
-    "comentario": "Uma obra-prima do terror! A atmosfera é incrível.",
-    "data_registro": "2026-04-06 14:30:00"
-  },
-  {
-    "id": "rev_76g2b3c",
-    "usuario_id": "user_76g2b3c4d5e6f",
-    "midia_id": "mid_76g2b3c4d5e6f",
-    "nota": 5,
-    "comentario": "Jogo bom.",
-    "data_registro": "2026-04-06 15:00:00"
-  }
+    {
+        "id": "rev_65f1a2b",
+        "usuario_id": "user_65f1a2b3c4d5e",
+        "midia_id": "mid_65f1a2b3c4d5e",
+        "nota": 5,
+        "comentario": "Uma obra-prima do terror! A atmosfera \u00e9 incrivel.",
+        "data_registro": "2026-04-06 14:30:00"
+    },
+    {
+        "id": "rev_76g2b3c",
+        "usuario_id": "user_76g2b3c4d5e6f",
+        "midia_id": "mid_76g2b3c4d5e6f",
+        "nota": 5,
+        "comentario": "Jogo bom.",
+        "data_registro": "2026-04-06 15:00:00"
+    }
 ]

@@ -28,6 +28,38 @@ class AvaliacaoModel {
 
         return $avaliacoes; 
     }
+    // Busca apenas uma avaliação específica pelo ID
+    public function obterPorId($id) {
+        $avaliacoes = $this->carregarJson($this->pathAv);
+        foreach ($avaliacoes as $av) {
+            if ($av['id'] === $id) {
+                return $av;
+            }
+        }
+        return null;
+    }
+
+    // Salva a nova nota e o novo comentário no JSON
+    public function atualizar($id, $novaNota, $novoComentario) {
+        $avaliacoes = $this->carregarJson($this->pathAv);
+        $atualizado = false;
+
+        foreach ($avaliacoes as &$av) {
+            if ($av['id'] === $id) {
+                $av['nota'] = (int) $novaNota;
+                $av['comentario'] = $novoComentario;
+                $atualizado = true;
+                break; // Para o loop pois já achou o que queria
+            }
+        }
+
+        if ($atualizado) {
+            // Salva de volta no arquivo json com a formatação bonita
+            file_put_contents($this->pathAv, json_encode($avaliacoes, JSON_PRETTY_PRINT));
+            return true;
+        }
+        return false;
+    }
 
     private function carregarJson($caminho) {
         if (!file_exists($caminho)) {
