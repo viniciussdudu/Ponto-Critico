@@ -1,0 +1,50 @@
+[
+    {
+        "id": "mid_65f1a2b3c4d5e",
+        "titulo": "O Iluminado",
+        "tipo": "Filme",
+        "genero": "Terror",
+        "data_lancamento": "1980-05-23",
+        "sinopse": "Um homem e sua família ficam isolados em um hotel remoto durante o inverno, onde uma presença sinistra influencia o pai à violência."
+    },
+    {
+        "id": "mid_76g2b3c4d5e6f",
+        "titulo": "Elden Ring",
+        "tipo": "Jogo",
+        "genero": "Ação",
+        "data_lancamento": "2022-02-25",
+        "sinopse": "Um RPG de ação em um vasto mundo aberto onde você deve restaurar o Anel Príncipio e se tornar o Lorde Príncipio."
+    },
+    {
+        "id": "mid_87h3c4d5e6f7g",
+        "titulo": "Dom Casmurro",
+        "tipo": "Livro",
+        "genero": "Drama",
+        "data_lancamento": "1899-01-01",
+        "sinopse": "A clássica história de Bentinho e sua dúvida eterna sobre a fidelidade de Capitu."
+    },
+    {
+        "id": "mid_d66ebd7a755006",
+        "titulo": "mario galaxy",
+        "tipo": "Jogo",
+        "genero": "Ação",
+        "data_lancamento": "2026-04-07",
+        "sinopse": "aaaa"
+    },
+    {
+        "id": "mid_23d16ebf7de30b",
+        "titulo": "Jojo",
+        "tipo": "Série",
+        "genero": "Animação",
+        "data_lancamento": "2012-01-12",
+        "sinopse": "Uma aventura Bizarra"
+    },
+    {
+        "id": "mid_bcc377f0c962db",
+        "titulo": "Pecadores",
+        "tipo": "Filme",
+        "genero": "Terror",
+        "data_lancamento": "2025-04-17",
+        "sinopse": "Dois irmãos gêmeos tentam deixar suas vidas problemáticas para trás e retornam à sua cidade natal para recomeçar. Lá, eles descobrem que um mal ainda maior está à espreita para recebê-los de volta."
+    }
+]
