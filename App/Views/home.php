@@ -40,6 +40,8 @@
                 <strong><?= htmlspecialchars($av['titulo_midia']) ?></strong><br>
                 <span>Nota: <?= str_repeat("⭐", $av['nota']) ?> (<?= $av['nota'] ?>/5)</span><br>
                 <em>"<?= htmlspecialchars($av['comentario']) ?>"</em>
+<br>
+<a href="index.php?url=avaliacao/editar&id=<?= urlencode($av['id']) ?>" style="font-size: 12px; color: blue; text-decoration: none;">✏️ Editar</a>
             </li>
         <?php endforeach; ?>
     </ul>

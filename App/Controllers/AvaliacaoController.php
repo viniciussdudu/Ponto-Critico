@@ -57,4 +57,32 @@ class AvaliacaoController
         }
         exit;
     }
+public function editar() {
+        $id = $_GET['id'] ?? null;
+        
+        // Chamamos o Model explicitamente aqui
+        $model = new \App\Models\AvaliacaoModel(); 
+        $avaliacao = $model->obterPorId($id);
+        
+        if ($avaliacao) {
+            // Nota: Garanti que o App está com 'A' maiúsculo aqui também!
+            require_once __DIR__ . '/../Views/editar_avaliacao.php';
+        } else {
+            header('Location: index.php?url=home');
+        }
+    }
+
+    public function atualizar() {
+        $id = $_POST['id'] ?? null;
+        $nota = $_POST['nota'] ?? null;
+        $comentario = $_POST['comentario'] ?? null;
+
+        if ($id && $nota && $comentario) {
+            // Chamamos o Model explicitamente aqui também
+            $model = new \App\Models\AvaliacaoModel();
+            $model->atualizar($id, $nota, $comentario);
+            header('Location: index.php?url=home');
+            exit;
+        }
+    }
 }

@@ -29,6 +29,11 @@ switch ($url) {
         $controller = new \App\Controllers\AuthController();
         $controller->logout();
         break;
+    
+    case 'avaliacao/atualizar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->atualizar();
+        break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
@@ -58,18 +63,18 @@ switch ($url) {
     $avaliacoes = $avModel->obterAvaliacoesCompletas();
 
     // 3. Chama a View
-    require_once __DIR__ . '/../app/Views/home.php';
+    require_once __DIR__ . '/../App/Views/home.php';
     break;
 
     case 'cadastro':
-        require_once __DIR__ . '/../app/Views/cadastro.php';
+        require_once __DIR__ . '/../App/Views/cadastro.php';
         break;
     case 'login':
-        require_once __DIR__ . '/../app/Views/login.php';
+        require_once __DIR__ . '/../App/Views/login.php';
         break;
     
     case 'recuperar-senha':
-        require_once __DIR__ . '/../app/Views/Recuperar-senha.php';
+        require_once __DIR__ . '/../App/Views/Recuperar-senha.php';
         break;
 
     case 'auth/redefinir-senha':
@@ -78,7 +83,7 @@ switch ($url) {
         break;
 
     case 'redefinir':
-    require_once __DIR__ . '/../app/Views/redefinir.php';
+    require_once __DIR__ . '/../App/Views/redefinir.php';
     break;
 
     case 'auth/confirmar-redefinicao':
@@ -102,7 +107,7 @@ switch ($url) {
             header('Location: index.php?url=login&erro=restrito');
             exit();
         }
-        require_once __DIR__ . '/../app/Views/cadastro_midia.php';
+        require_once __DIR__ . '/../App/Views/cadastro_midia.php';
         break;
 
     case 'midia/salvar':
@@ -121,4 +126,9 @@ case 'perfil/atualizar':
     $controller = new \App\Controllers\UsuarioController();
     $controller->atualizar();
     break;
+
+case 'avaliacao/editar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->editar();
+        break;
 }
