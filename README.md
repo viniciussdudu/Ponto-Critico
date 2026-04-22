@@ -4,7 +4,7 @@ Este projeto foi desenvolvido como parte da disciplina de **Engenharia de Softwa
 
 O **Ponto-Crítico** é uma plataforma inspirada no *Letterboxd*, permitindo que usuários avaliem e compartilhem críticas sobre filmes, livros e jogos em um ambiente centralizado.
 
-## 👥 Equipe e Atribuições
+## 👥 Equipe e Atribuições Sprint 1
 
 | Integrante | Função e Responsabilidades |
 | :--- | :--- |
@@ -13,6 +13,16 @@ O **Ponto-Crítico** é uma plataforma inspirada no *Letterboxd*, permitindo que
 | **Arthur Bispo** | Desenvolvedor, responsável pela implementação do sistema de registro de avaliações e notas dos usuários. |
 | **Klaus Henrique** | Desenvolvedor, responsável pela implementação do motor de visualização e exibição das avaliações e dados do catálogo. |
 | **Samara Coelho** | Desenvolvedora, responsável pela implementação do fluxo de recuperação de acesso e redefinição de senha. |
+
+## 👥 Equipe e Atribuições Sprint 2
+
+| Integrante | Função e Responsabilidades |
+| :--- | :--- |
+| **Vinicius Eduardo** | Editar perfil do usuário |
+| **Gustavo Bringel** | Editar mídias  |
+| **Arthur Bispo** | Exclusão do perfil do usuário |
+| **Klaus Henrique** | Editar avaliações |
+| **Samara Coelho** | visualização perfil do usuário |
 
 ## 🛠️ Tecnologias Utilizadas
 
