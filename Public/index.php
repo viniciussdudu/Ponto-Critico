@@ -39,14 +39,17 @@ switch ($url) {
 // 2. DEPOIS O HTML (Menu e Views)
 ?>
 <nav>
-    <a href="index.php?url=home">Home</a> | 
-    <?php if (isset($_SESSION['usuario_id'])): ?>
-        <span>Bem-vindo, <?= $_SESSION['usuario_nome'] ?>!</span> | 
-        <a href="index.php?url=auth/logout">Sair</a>
-    <?php else: ?>
-        <a href="index.php?url=login">Login</a> | 
-        <a href="index.php?url=cadastro">Cadastrar Conta</a>
-    <?php endif; ?>
+<a href="index.php?url=home">Home</a> |
+<?php if (isset($_SESSION['usuario_id'])): ?>
+<span>Bem-vindo, <?= $_SESSION['usuario_nome'] ?>!</span> |
+
+<a href="index.php?url=perfil">Meu Perfil</a> |
+
+<a href="index.php?url=auth/logout">Sair</a>
+<?php else: ?>
+<a href="index.php?url=login">Login</a> |
+<a href="index.php?url=cadastro">Cadastrar Conta</a>
+<?php endif; ?>
 </nav>
 <hr>
 
@@ -113,6 +116,10 @@ switch ($url) {
     case 'midia/salvar':
         $controller = new \App\Controllers\MidiaController();
         $controller->salvar();
+        break;
+    case 'perfil':
+        $controller = new \App\Controllers\AuthController();
+        $controller->visualizarPerfil();
         break;
 
     // Rota para mostrar o formulário
