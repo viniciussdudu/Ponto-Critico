@@ -38,6 +38,15 @@ switch ($url) {
 
 // 2. DEPOIS O HTML (Menu e Views)
 ?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Crítico</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 <nav>
     <a href="index.php?url=home">Home</a> | 
     <?php if (isset($_SESSION['usuario_id'])): ?>
@@ -132,3 +141,6 @@ case 'avaliacao/editar':
         $controller->editar();
         break;
 }
+?>
+</body>
+</html>

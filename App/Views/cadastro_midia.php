@@ -1,20 +1,18 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Mídia - Ponto Crítico</title>
-</head>
-<body>
-    <div>
-        <h1>Cadastrar Mídia</h1>
+<div class="container">
+    <div class="card card-largo">
+        <h1>Cadastrar Nova Mídia</h1>
+        <p class="subtitulo">Adicione uma nova mídia ao sistema</p>
 
-        <?php if (isset($erro)): ?>
-            <p><?php echo $erro; ?></p>
+        <?php if (!empty($erro)): ?>
+            <div class="mensagem-erro">
+                <?= htmlspecialchars($erro) ?>
+            </div>
         <?php endif; ?>
 
         <?php if (isset($_GET['sucesso'])): ?>
-            <p>Mídia cadastrada com sucesso!</p>
+            <div class="mensagem-sucesso">
+                Mídia cadastrada com sucesso!
+            </div>
         <?php endif; ?>
 
         <form method="POST" action="index.php?url=midia/salvar">
@@ -62,11 +60,14 @@
                 <textarea id="sinopse" name="sinopse" required></textarea>
             </div>
 
-            <div>
-                <a href="index.php?url=home">Voltar</a>
-                <button type="submit">Salvar Mídia</button>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                <a href="index.php?url=home" class="btn btn-secundario btn-inline">Voltar</a>
+                <button type="submit" class="btn">Salvar Mídia</button>
             </div>
         </form>
+
+        <p class="text-center">
+            <a href="index.php?url=home">Voltar para a Home</a>
+        </p>
     </div>
-</body>
-</html>
+</div>
