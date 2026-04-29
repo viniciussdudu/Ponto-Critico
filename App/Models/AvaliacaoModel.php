@@ -71,7 +71,7 @@ class AvaliacaoModel {
     public function obterPorId($id) {
         $avaliacoes = $this->carregarJson($this->pathAv);
         foreach ($avaliacoes as $av) {
-            if ($av['id'] === $id) {
+            if ($av['id'] == $id) {
                 return $av;
             }
         }
@@ -83,7 +83,7 @@ class AvaliacaoModel {
         $atualizado = false;
 
         foreach ($avaliacoes as &$av) {
-            if ($av['id'] === $id) {
+            if ($av['id'] == $id) {
                 $av['nota'] = (int) $novaNota;
                 $av['comentario'] = $novoComentario;
                 $atualizado = true;
