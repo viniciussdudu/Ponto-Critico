@@ -4,7 +4,7 @@
 
 ### Professor: Edeilson Milhomem da Silva
 
-### Time: Vinicius Eduardo De Sousa Silveira, Arthur Pereira Bispo, Klaus Henrique Otaviano Souza, Gustavo Leite Brigel
+### Time: Vinicius Eduardo De Sousa Silveira, Arthur Pereira Bispo, Klaus Henrique Otaviano Souza, Gustavo Leite Brigel, Samara Coelho da Silva
 
 # Ponto-Crítico: Sistema de Review e Catálogo
 ## Visão geral:
