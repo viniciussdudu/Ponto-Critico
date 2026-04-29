@@ -4,7 +4,7 @@
         "usuario_id": "user_65f1a2b3c4d5e",
         "midia_id": "mid_65f1a2b3c4d5e",
         "nota": 5,
-        "comentario": "Uma obra-prima do terror! A atmosfera é incrível.",
+        "comentario": "Uma obra-prima do terror! A atmosfera \u00e9 incr\u00edvel.",
         "data_registro": "2026-04-06 14:30:00"
     },
     {
@@ -19,7 +19,7 @@
         "id": 1776013301,
         "midia_id": "mid_65f1a2b3c4d5e",
         "usuario_id": "user_69dbaee48fa3e",
-        "nota": 5,
+        "nota": 3,
         "comentario": "bom",
         "data": "12\/04\/2026 17:01"
     },
@@ -36,7 +36,7 @@
         "midia_id": "mid_bcc377f0c962db",
         "usuario_id": "user_69dbaee48fa3e",
         "nota": 5,
-        "comentario": "Gostei Muito do Filme! finalmente um filme de vampiro que é bom!",
+        "comentario": "Gostei Muito do Filme! finalmente um filme de vampiro que \u00e9 bom!",
         "data": "12\/04\/2026 17:13"
     }
 ]

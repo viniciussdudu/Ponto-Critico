@@ -29,19 +29,36 @@ switch ($url) {
         $controller = new \App\Controllers\AuthController();
         $controller->logout();
         break;
+    
+    case 'avaliacao/atualizar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->atualizar();
+        break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
 ?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Crítico</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 <nav>
-    <a href="index.php?url=home">Home</a> | 
-    <?php if (isset($_SESSION['usuario_id'])): ?>
-        <span>Bem-vindo, <?= $_SESSION['usuario_nome'] ?>!</span> | 
-        <a href="index.php?url=auth/logout">Sair</a>
-    <?php else: ?>
-        <a href="index.php?url=login">Login</a> | 
-        <a href="index.php?url=cadastro">Cadastrar Conta</a>
-    <?php endif; ?>
+<a href="index.php?url=home">Home</a> |
+<?php if (isset($_SESSION['usuario_id'])): ?>
+<span>Bem-vindo, <?= $_SESSION['usuario_nome'] ?>!</span> |
+
+<a href="index.php?url=perfil">Meu Perfil</a> |
+
+<a href="index.php?url=auth/logout">Sair</a>
+<?php else: ?>
+<a href="index.php?url=login">Login</a> |
+<a href="index.php?url=cadastro">Cadastrar Conta</a>
+<?php endif; ?>
 </nav>
 <hr>
 
@@ -58,18 +75,18 @@ switch ($url) {
     $avaliacoes = $avModel->obterAvaliacoesCompletas();
 
     // 3. Chama a View
-    require_once __DIR__ . '/../app/Views/home.php';
+    require_once __DIR__ . '/../App/Views/home.php';
     break;
 
     case 'cadastro':
-        require_once __DIR__ . '/../app/Views/cadastro.php';
+        require_once __DIR__ . '/../App/Views/cadastro.php';
         break;
     case 'login':
-        require_once __DIR__ . '/../app/Views/login.php';
+        require_once __DIR__ . '/../App/Views/login.php';
         break;
     
     case 'recuperar-senha':
-        require_once __DIR__ . '/../app/Views/Recuperar-senha.php';
+        require_once __DIR__ . '/../App/Views/Recuperar-senha.php';
         break;
 
     case 'auth/redefinir-senha':
@@ -78,7 +95,7 @@ switch ($url) {
         break;
 
     case 'redefinir':
-    require_once __DIR__ . '/../app/Views/redefinir.php';
+    require_once __DIR__ . '/../App/Views/redefinir.php';
     break;
 
     case 'auth/confirmar-redefinicao':
@@ -102,11 +119,35 @@ switch ($url) {
             header('Location: index.php?url=login&erro=restrito');
             exit();
         }
-        require_once __DIR__ . '/../app/Views/cadastro_midia.php';
+        require_once __DIR__ . '/../App/Views/cadastro_midia.php';
         break;
 
     case 'midia/salvar':
         $controller = new \App\Controllers\MidiaController();
         $controller->salvar();
         break;
+    case 'perfil':
+        $controller = new \App\Controllers\AuthController();
+        $controller->visualizarPerfil();
+        break;
+
+    // Rota para mostrar o formulário
+case 'perfil/editar':
+    $controller = new \App\Controllers\UsuarioController();
+    $controller->exibirEdicao();
+    break;
+
+// Rota para processar a alteração
+case 'perfil/atualizar':
+    $controller = new \App\Controllers\UsuarioController();
+    $controller->atualizar();
+    break;
+
+case 'avaliacao/editar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->editar();
+        break;
 }
+?>
+</body>
+</html>

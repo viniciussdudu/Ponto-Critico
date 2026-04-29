@@ -30,9 +30,15 @@
         "id": "user_69d58ae287389"
     },
     {
-        "nome": "vinicius eduardo",
+        "nome": "vinicius silveira",
         "email": "viniciuss@gmail",
         "senha": "$2y$12$Go0sLJJdE5RPDCwTHwARy.9.9xyF7aK.wSYMU56qG\/MStYfoKGdTS",
         "id": "user_69dbaee48fa3e"
+    },
+    {
+        "nome": "Samara",
+        "email": "samara@gmail.com",
+        "senha": "$2y$12$e3t4HQOxg4R3PuXM\/JJzee6jl3LGPfubB0MGp8OLz\/d72L.drqnQS",
+        "id": "user_69f0f476b719f"
     }
 ]

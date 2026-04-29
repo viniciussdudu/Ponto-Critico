@@ -1,27 +1,32 @@
-# 🍴 Ponto-Crítico: Sistema de Review e Catálogo
+# Engenharia de Software - 2026.1 | Universidade Federal do Tocantins - Palmas
 
-Este projeto foi desenvolvido como parte da disciplina de **Engenharia de Software** do curso de **Ciência da Computação** do 1° Semestre de 2026 com o **Professor Edeilson Milhomem**. A aplicação utiliza a arquitetura **MVC (Model-View-Controller)** e persistência de dados em arquivos **JSON**, seguindo rigorosamente o fluxo de trabalho **GitFlow**.
+### Curso: Bacharelado em Ciência da Computação
 
-O **Ponto-Crítico** é uma plataforma inspirada no *Letterboxd*, permitindo que usuários avaliem e compartilhem críticas sobre filmes, livros e jogos em um ambiente centralizado.
+### Professor: Edeilson Milhomem da Silva
 
-## 👥 Equipe e Atribuições
+### Time: Vinicius Eduardo De Sousa Silveira, Arthur Pereira Bispo, Klaus Henrique Otaviano Souza, Gustavo Leite Brigel
 
-| Integrante | Função e Responsabilidades |
-| :--- | :--- |
-| **Vinicius Eduardo** | Arquiteto de Software, responsável pelo setup inicial do projeto e pela implementação do sistema de autenticação e cadastro de usuários. |
-| **Gustavo Bringel** | Desenvolvedor, responsável pela implementação do sistema de catálogo e cadastro de mídias (filmes, livros e jogos). |
-| **Arthur Bispo** | Desenvolvedor, responsável pela implementação do sistema de registro de avaliações e notas dos usuários. |
-| **Klaus Henrique** | Desenvolvedor, responsável pela implementação do motor de visualização e exibição das avaliações e dados do catálogo. |
-| **Samara Coelho** | Desenvolvedora, responsável pela implementação do fluxo de recuperação de acesso e redefinição de senha. |
+# Ponto-Crítico: Sistema de Review e Catálogo
+## Visão geral:
 
-## 🛠️ Tecnologias Utilizadas
+O Ponto Crítico é uma plataforma web desenvolvida para a centralização e compartilhamento de críticas e avaliações de mídias (filmes, séries, jogos e livros). O projeto nasceu da necessidade de criar um ambiente colaborativo onde entusiastas podem catalogar suas experiências culturais e interagir com as opiniões de outros usuários..
 
-* **Linguagem:** PHP 8.x
-* **Arquitetura:** MVC (Model-View-Controller)
-* **Banco de Dados:** Persistência via arquivos JSON
-* **Versionamento:** Git (Branching Model: GitFlow)
 
-## 🚀 Como Rodar o Projeto Localmente
+## Funcionalidades Principais:
+
+Gestão de Usuários: Cadastro, login e edição de perfil personalizado.
+
+Catálogo de Mídias: Sistema para registro e listagem de diferentes tipos de conteúdo.
+
+Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críticas textuais vinculadas ao perfil do usuário.
+
+## Sprints
+
+[sprint 1](https://github.com/viniciussdudu/Ponto-Critico/blob/develop/docs/Sprints/Sprint%201_%20Cadastro%20e%20avalia%C3%A7%C3%A3o%20das%20m%C3%ADdias%20pdf.pdf)
+
+[sprint 2](https://github.com/viniciussdudu/Ponto-Critico/blob/develop/docs/Sprints/Sprint%202_%20Edi%C3%A7%C3%A3o%20do%20perfil%20do%20usu%C3%A1rio%20e%20de%20avalia%C3%A7%C3%B5es%20pdf.pdf)
+
+## Como Rodar o Projeto Localmente
 
 1.  Certifique-se de ter o **PHP 8.x** instalado.
 2.  Clone o repositório:
@@ -33,10 +38,3 @@ O **Ponto-Crítico** é uma plataforma inspirada no *Letterboxd*, permitindo que
     php -S localhost:8000 -t Public
     ```
 4.  Abra o navegador e acesse: `http://localhost:8000`
-
-## 🔄 Fluxo de Desenvolvimento (GitFlow)
-
-O projeto seguiu o seguinte padrão de branches:
-* **main:** Versão estável (Release).
-* **develop:** Branch de integração.
-* **feature/:** Desenvolvimento individual de funcionalidades (ex: `feature/cadastro-midias`, `feature/recuperar-senha`).

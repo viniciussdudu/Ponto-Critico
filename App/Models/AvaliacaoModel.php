@@ -68,4 +68,33 @@ class AvaliacaoModel {
         $dados = json_decode($conteudo, true);
         return is_array($dados) ? $dados : [];
     }
+    public function obterPorId($id) {
+        $avaliacoes = $this->carregarJson($this->pathAv);
+        foreach ($avaliacoes as $av) {
+            if ($av['id'] == $id) {
+                return $av;
+            }
+        }
+        return null;
+    }
+
+    public function atualizar($id, $novaNota, $novoComentario) {
+        $avaliacoes = $this->carregarJson($this->pathAv);
+        $atualizado = false;
+
+        foreach ($avaliacoes as &$av) {
+            if ($av['id'] == $id) {
+                $av['nota'] = (int) $novaNota;
+                $av['comentario'] = $novoComentario;
+                $atualizado = true;
+                break;
+            }
+        }
+
+        if ($atualizado) {
+            file_put_contents($this->pathAv, json_encode($avaliacoes, JSON_PRETTY_PRINT));
+            return true;
+        }
+        return false;
+    }
 }

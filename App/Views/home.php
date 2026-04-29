@@ -1,49 +1,72 @@
-<h1>Bem-vindo ao Ponto Crítico!</h1>
+<div class="page">
+    <header class="topo">
+        <div>
+            <h1>Ponto Crítico</h1>
+            <p class="subtitulo">Gerencie mídias e acompanhe avaliações do sistema.</p>
+        </div>
 
-<?php if (isset($_SESSION['usuario_id'])): ?>
-    <p>Olá, <strong><?= $_SESSION['usuario_nome'] ?></strong>!</p>
-    <a href="index.php?url=cadastrar-midia">Cadastrar Nova Mídia</a> |
-    
-    <a href="index.php?url=avaliar">Avaliar uma Mídia</a> |
+        <div class="acoes-topo">
+            <a class="btn" href="index.php?url=cadastrar-midia">Cadastrar Nova Mídia</a>
+            <a class="btn btn-secundario" href="index.php?url=cadastro">Criar Conta</a>
+            <a class="btn btn-secundario" href="index.php?url=recuperar-senha">Recuperar Acesso</a>
+        </div>
+    </header>
 
+    <main class="grid-home">
+        <section class="card">
+            <h2>Mídias Cadastradas</h2>
 
+            <?php if (!empty($midias)): ?>
+                <div class="lista-cards">
+                    <?php foreach ($midias as $midia): ?>
+                        <div class="item-card">
+                            <h3><?= htmlspecialchars($midia['titulo']) ?></h3>
+                            <p><strong>Tipo:</strong> <?= htmlspecialchars($midia['tipo']) ?></p>
+                            <p><strong>Gênero:</strong> <?= htmlspecialchars($midia['genero']) ?></p>
+                            <p><strong>Lançamento:</strong> <?= htmlspecialchars($midia['data_lancamento'] ?? 'Não informado') ?></p>
+                            <?php if (!empty($midia['sinopse'])): ?>
+                                <p><strong>Sinopse:</strong> <?= htmlspecialchars($midia['sinopse']) ?></p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <div class="estado-vazio">
+                    <p>Nenhuma mídia cadastrada ainda.</p>
+                </div>
+            <?php endif; ?>
+        </section>
 
+        <section class="card">
+            <h2>Avaliações Recentes</h2>
 
-   
-<?php endif; ?>
+            <?php if (!empty($avaliacoes)): ?>
+                <div class="lista-avaliacoes">
+                    <?php foreach ($avaliacoes as $av): ?>
+                        <div class="avaliacao-card">
+                            <h3>
+                                <?= htmlspecialchars($av['nome_usuario'] ?? 'Usuário') ?>
+                                <span class="avaliou-texto">avaliou</span>
+                                <?= htmlspecialchars($av['titulo_midia'] ?? 'Mídia') ?>
+                            </h3>
 
-<hr>
+                            <p class="estrelas">
+                                <?= str_repeat("⭐", (int)($av['nota'] ?? 0)) ?>
+                                <span>(<?= (int)($av['nota'] ?? 0) ?>/5)</span>
+                            </p>
 
-<h2>Mídias Cadastradas:</h2>
-<?php if (!empty($midias)): ?>
-    <ul>
-        <?php foreach ($midias as $midia): ?>
-            <li>
-                <strong><?= htmlspecialchars($midia['titulo']) ?></strong> - 
-                <?= htmlspecialchars($midia['tipo']) ?> - 
-                <?= htmlspecialchars($midia['genero']) ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php else: ?>
-    <p>Nenhuma mídia cadastrada ainda.</p>
-<?php endif; ?>
-
-<hr>
-
-<h2>Avaliações Recentes:</h2>
-<?php if (!empty($avaliacoes)): ?>
-    <ul>
-        <?php foreach ($avaliacoes as $av): ?>
-            <li style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                <strong><?= htmlspecialchars($av['nome_usuario']) ?></strong> avaliou 
-                <strong><?= htmlspecialchars($av['titulo_midia']) ?></strong><br>
-                <span>Nota: <?= str_repeat("⭐", $av['nota']) ?> (<?= $av['nota'] ?>/5)</span><br>
-                <em>"<?= htmlspecialchars($av['comentario']) ?>"</em>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php else: ?>
-    <p>Nenhuma avaliação encontrada.</p>
-<?php endif; ?>
-
+                            <p class="comentario">
+                                “<?= htmlspecialchars($av['comentario'] ?? '') ?>”
+                            </p>
+                            <a href="index.php?url=avaliacao/editar&id=<?= urlencode($av['id']) ?>" class="btn btn-inline btn-secundario">Editar Avaliação</a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <div class="estado-vazio">
+                    <p>Nenhuma avaliação encontrada.</p>
+                </div>
+            <?php endif; ?>
+        </section>
+    </main>
+</div>
