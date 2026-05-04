@@ -10,7 +10,9 @@
         </div>
 
         <div class="acoes-topo">
-            <a class="btn" href="index.php?url=cadastrar-midia">Cadastrar Nova Mídia</a>
+            <?php if (isset($_SESSION['usuario']) && isset($_SESSION['usuario']['tipo']) && $_SESSION['usuario']['tipo'] === 'admin'): ?>
+                <a class="btn" href="index.php?url=cadastrar-midia">Cadastrar Nova Mídia</a>
+            <?php endif; ?>
             <a class="btn btn-secundario" href="index.php?url=cadastro">Criar Conta</a>
             <a class="btn btn-secundario" href="index.php?url=recuperar-senha">Recuperar Acesso</a>
         </div>
