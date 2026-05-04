@@ -1,8 +1,12 @@
 <div class="page">
     <header class="topo">
-        <div>
-            <h1>Ponto Crítico</h1>
-            <p class="subtitulo">Gerencie mídias e acompanhe avaliações do sistema.</p>
+        <div class="brand-area">
+            <img src="img/logo2.pontocritico.png" alt="Logo Ponto Critico" class="logo-home">
+
+            <div>
+                <h1>Ponto Crítico</h1>
+                <p class="subtitulo-home">Gerencie mídias e acompanhe avaliações do sistema.</p>
+            </div>
         </div>
 
         <div class="acoes-topo">
@@ -24,6 +28,7 @@
                             <p><strong>Tipo:</strong> <?= htmlspecialchars($midia['tipo']) ?></p>
                             <p><strong>Gênero:</strong> <?= htmlspecialchars($midia['genero']) ?></p>
                             <p><strong>Lançamento:</strong> <?= htmlspecialchars($midia['data_lancamento'] ?? 'Não informado') ?></p>
+
                             <?php if (!empty($midia['sinopse'])): ?>
                                 <p><strong>Sinopse:</strong> <?= htmlspecialchars($midia['sinopse']) ?></p>
                             <?php endif; ?>
@@ -58,7 +63,10 @@
                             <p class="comentario">
                                 “<?= htmlspecialchars($av['comentario'] ?? '') ?>”
                             </p>
-                            <a href="index.php?url=avaliacao/editar&id=<?= urlencode($av['id']) ?>" class="btn btn-inline btn-secundario">Editar Avaliação</a>
+
+                            <a href="index.php?url=avaliacao/editar&id=<?= urlencode($av['id']) ?>" class="btn btn-inline btn-secundario">
+                                Editar Avaliação
+                            </a>
                         </div>
                     <?php endforeach; ?>
                 </div>
