@@ -38,3 +38,9 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
     php -S localhost:8000 -t Public
     ```
 4.  Abra o navegador e acesse: `http://localhost:8000`
+
+5.  Certifique-se de ter o Composer instalado.
+       No Terminal digite:
+     ```bash
+    composer install
+    ```
