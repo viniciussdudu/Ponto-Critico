@@ -19,9 +19,15 @@ class AuthController {
                     session_start();
                 }
 
-                // Salva os dados na sessão (importante para o index.php)
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['usuario_nome'] = $usuario['nome'];
+
+                $_SESSION['usuario'] = [
+                    'id' => $usuario['id'],
+                    'nome' => $usuario['nome'],
+                    'email' => $usuario['email'],
+                    'tipo' => $usuario['tipo'] ?? 'comum'
+                ];
 
                 header('Location: index.php?url=home');
                 exit();
