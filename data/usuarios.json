@@ -40,5 +40,23 @@
         "email": "samara@gmail.com",
         "senha": "$2y$12$e3t4HQOxg4R3PuXM\/JJzee6jl3LGPfubB0MGp8OLz\/d72L.drqnQS",
         "id": "user_69f0f476b719f"
+    },
+    {
+        "nome": "arthur bispo",
+        "email": "arthur.bispo@mail.uft.edu.br",
+        "senha": "$2y$10$FrW9M2P5IJLE5bT\/vYI1nef5y2DnM6EPfDgLVOyJ\/Ka2yjp2CzYw2",
+        "id": "user_69f37fcb1784d"
+    },
+    {
+        "nome": "Arthur Bispo",
+        "email": "arthursomotos@gmail.com",
+        "senha": "$2y$10$2ebIj1WWENI2T23JYHQJLOeakWcAMRignxJweF.BpqRg\/QQI8WGc.",
+        "id": "user_69f808404756f"
+    },
+    {
+        "nome": "Arthur Bispo",
+        "email": "arthursomotos@gmail.com",
+        "senha": "$2y$10$axlGi3uf45NgnBz4JpRCVubqyCEfkw7hIJKEsMEkjTpnJJuEKKHYW",
+        "id": "user_69f8084094d0f"
     }
 ]
