@@ -1,4 +1,7 @@
 <?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
 session_start();
 
 spl_autoload_register(function ($class) {
@@ -81,8 +84,20 @@ switch ($url) {
     case 'cadastro':
         require_once __DIR__ . '/../App/Views/cadastro.php';
         break;
+
+    
     case 'login':
         require_once __DIR__ . '/../App/Views/login.php';
+        break;
+
+    case 'confirmar':
+        $controller = new App\Controllers\AuthController();
+        $controller->confirmar(); // Chama o método que processa o token
+        break;
+
+    case 'aviso-confirmacao':
+        // Rota para a view que avisa que o e-mail foi enviado
+        require_once __DIR__ . '/../App/Views/aviso-confirmacao.php';
         break;
     
     case 'recuperar-senha':
@@ -98,7 +113,7 @@ switch ($url) {
     require_once __DIR__ . '/../App/Views/redefinir.php';
     break;
 
-    case 'auth/confirmar-redefinicao':
+    case 'confirmar-redefinicao':
     $controller = new \App\Controllers\AuthController();
     $controller->confirmarRedefinicao();
     break;

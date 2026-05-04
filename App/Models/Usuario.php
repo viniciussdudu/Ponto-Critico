@@ -47,14 +47,16 @@ class Usuario {
 }
 
     //==========================Listar todos
-    public function listarTodos() {
-        if (!file_exists($this->filePath)) {
-            return [];
-        }
-        $conteudo = file_get_contents($this->filePath);
-        return json_decode($conteudo, true) ?? [];
-    }
+   public function listarTodos() {
+    $caminho = __DIR__ . '/../../data/usuarios.json'; // Ajuste o caminho se necessário
+    if (!file_exists($caminho)) return [];
+    return json_decode(file_get_contents($caminho), true) ?? [];
+}
 
+public function atualizarLista($lista) {
+    $caminho = __DIR__ . '/../../data/usuarios.json';
+    return file_put_contents($caminho, json_encode($lista, JSON_PRETTY_PRINT));
+}
    
     private function persistir($lista) {
         return file_put_contents($this->filePath, json_encode($lista, JSON_PRETTY_PRINT));

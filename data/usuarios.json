@@ -1,44 +1,35 @@
 [
     {
-        "id": "user_65f1a2b3c4d5e",
-        "nome": "Usu\u00e1rio Teste 01",
-        "email": "teste01@exemplo.com.br",
-        "senha": "PoderLobo123"
-    },
-    {
-        "id": "user_76g2b3c4d5e6f",
-        "nome": "Cr\u00edtico de Cinema",
-        "email": "critico@ponto-critico.com",
-        "senha": "1234567"
+        "nome": "haterrerere",
+        "email": "hatefdfdfr@gmail.com",
+        "senha": "$2y$12$iM\/5T4hnuq1gcH\/EkCCnSefRFhaDzX4ObZtQBAfKDwYj7oJS.uM7i",
+        "status": 0,
+        "token": "d099826c0d0906b2415ee8bb987b015e",
+        "id": "user_69f8e72d81335"
     },
     {
         "nome": "vinicius",
-        "email": "vinicius@mail",
-        "senha": "$2y$12$0LohTBTf\/Q08nPRkknBpZe37zLK9qEhxVz2pcjZzuFGoOOkMtHF1C",
-        "id": "user_69d58a4a049ad"
+        "email": "vinicius@gmail.com",
+        "senha": "$2y$12$W7y42poHYPGspRByNa2IQ.cIXF2576gcC\/pbyq4luLBTPPAmxarRu",
+        "status": 1,
+        "token": null,
+        "id": "user_69f8e7fda6c23",
+        "recuperar_token": null
     },
     {
-        "nome": "vinicius",
-        "email": "vinicius@mail",
-        "senha": "$2y$12$o6ZsPOe68m0IvdCgEYikLe4gDxY66SdCW1hV3BPyObZ\/.lLzMee4W",
-        "id": "user_69d58a52c7dee"
+        "nome": "junior",
+        "email": "Junior@gmail.com",
+        "senha": "$2y$12$S0HeCilmimUpiQ21VyAkieiYecIbW.KHprfkD.Pzj\/3NoUrtZsrY2",
+        "status": 1,
+        "token": null,
+        "id": "user_69f8e9ab44746"
     },
     {
-        "nome": "pablo",
-        "email": "pablo@mail",
-        "senha": "$2y$12$dSMSxTmqpfAv5m4KcTI.tuOcHYK5sVe.43t265RIQPhwXptw96B42",
-        "id": "user_69d58ae287389"
-    },
-    {
-        "nome": "vinicius silveira",
-        "email": "viniciuss@gmail",
-        "senha": "$2y$12$Go0sLJJdE5RPDCwTHwARy.9.9xyF7aK.wSYMU56qG\/MStYfoKGdTS",
-        "id": "user_69dbaee48fa3e"
-    },
-    {
-        "nome": "Samara",
-        "email": "samara@gmail.com",
-        "senha": "$2y$12$e3t4HQOxg4R3PuXM\/JJzee6jl3LGPfubB0MGp8OLz\/d72L.drqnQS",
-        "id": "user_69f0f476b719f"
+        "nome": "davi",
+        "email": "davi@gmail.com",
+        "senha": "$2y$12$mWLMBLt0LnADopEWTOMpZOBT3hcTKUg8qbF6drCsdIP.04bfhcfD6",
+        "status": 0,
+        "token": "b675cd0265a4ca3b662a17e5ed49d287",
+        "id": "user_69f8e9d04a4bc"
     }
 ]
