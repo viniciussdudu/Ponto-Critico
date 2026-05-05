@@ -4,7 +4,7 @@
 
 ### Professor: Edeilson Milhomem da Silva
 
-### Time: Vinicius Eduardo De Sousa Silveira, Arthur Pereira Bispo, Klaus Henrique Otaviano Souza, Gustavo Leite Brigel
+### Time: Vinicius Eduardo De Sousa Silveira, Arthur Pereira Bispo, Klaus Henrique Otaviano Souza, Gustavo Leite Brigel, Samara Coelho da Silva
 
 # Ponto-Crítico: Sistema de Review e Catálogo
 ## Visão geral:
@@ -33,8 +33,17 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
     ```bash
     git clone [https://github.com/viniciussdudu/Ponto-Critico.git](https://github.com/viniciussdudu/Ponto-Critico.git)
     ```
-3.  Inicie o servidor embutido do PHP apontando para a pasta pública:
+
+3. Certifique-se de ter o Composer instalado.
+       No Terminal digite:
+     ```bash
+    composer install
+    ```
+
+4.  Inicie o servidor embutido do PHP apontando para a pasta pública:
     ```bash
     php -S localhost:8000 -t Public
     ```
-4.  Abra o navegador e acesse: `http://localhost:8000`
+5.  Abra o navegador e acesse: `http://localhost:8000`
+
+   

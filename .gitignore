@@ -1,0 +1,30 @@
+/vendor
+    ```
+3.  Agora adicione os arquivos novamente:
+    ```bash
+    git add .
+    ```
+
+---
+
+### 3. O "hint" sobre Embedded Git Repository
+Isso aconteceu porque o PHPMailer baixado dentro da pasta `vendor` veio com a própria pasta `.git` dele. Ao tentar subir a `vendor`, o Git achou que você queria colocar um projeto dentro de outro. 
+*   **Ao fazer o passo anterior (ignorar a pasta vendor), esse erro sumirá automaticamente.**
+
+---
+
+### Próximos passos para subir:
+Depois de ajustar o `.gitignore` e dar o `git add .` novamente, siga com os comandos para finalizar o envio:
+
+1.  **Faça o commit:**
+    
+```bash
+    git commit -m "feat: implementa recuperacao de senha e organiza gitignore"
+    ```
+2.  **Suba para o GitHub:**
+    
+```bash
+    git push origin sua-branch
+    ```
+
+**Dica de amigo:** Verifique se o seu arquivo `data/usuarios.json` também deve ser subido. Se for um arquivo de banco de dados que cada um deve ter o seu, coloque `data/*.json` no seu arquivo `.gitignore` também!
