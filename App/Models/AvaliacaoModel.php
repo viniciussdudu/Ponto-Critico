@@ -46,6 +46,33 @@ class AvaliacaoModel {
     }
 
     /**
+     * Retorna as avaliações de um usuário, ordenadas por nota descendente.
+     * Se um filtro de nota for passado, mostra apenas avaliações com essa nota.
+     */
+    public function obterAvaliacoesDoUsuario($usuarioId, $notaFiltro = null) {
+        $avaliacoes = $this->obterAvaliacoesCompletas();
+        if (empty($avaliacoes)) {
+            return [];
+        }
+
+        $avaliacoesUsuario = array_filter($avaliacoes, function ($avaliacao) use ($usuarioId, $notaFiltro) {
+            if (($avaliacao['usuario_id'] ?? null) != $usuarioId) {
+                return false;
+            }
+            if ($notaFiltro !== null && isset($avaliacao['nota'])) {
+                return (int) $avaliacao['nota'] === (int) $notaFiltro;
+            }
+            return true;
+        });
+
+        usort($avaliacoesUsuario, function ($a, $b) {
+            return ((int) ($b['nota'] ?? 0)) <=> ((int) ($a['nota'] ?? 0));
+        });
+
+        return array_values($avaliacoesUsuario);
+    }
+
+    /**
      * LÓGICA DE ESCRITA: Salva a nova avaliação no arquivo JSON
      */
     public function salvar(array $novaAvaliacao): bool {

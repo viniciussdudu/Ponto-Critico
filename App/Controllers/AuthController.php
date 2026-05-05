@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Models\Usuario;
+use App\Models\AvaliacaoModel;
 use App\Services\EmailService;
 
 class AuthController {
@@ -198,9 +199,17 @@ class AuthController {
         }
 
         $usuarioModel = new Usuario();
+        $avaliacaoModel = new AvaliacaoModel();
 
+        $notaFiltro = filter_input(INPUT_GET, 'nota', FILTER_VALIDATE_INT, [
+            'options' => ['min_range' => 1, 'max_range' => 5]
+        ]);
+        if ($notaFiltro === false) {
+            $notaFiltro = null;
+        }
 
         $dadosUsuario = $usuarioModel->buscarPorId($_SESSION['usuario_id']);
+        $avaliacoesUsuario = $avaliacaoModel->obterAvaliacoesDoUsuario($_SESSION['usuario_id'], $notaFiltro);
 
         if (!$dadosUsuario) {
             session_destroy();
