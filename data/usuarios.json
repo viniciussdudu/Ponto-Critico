@@ -31,5 +31,13 @@
         "status": 0,
         "token": "b675cd0265a4ca3b662a17e5ed49d287",
         "id": "user_69f8e9d04a4bc"
+    },
+    {
+        "nome": "joaozinho",
+        "email": "joaozinho123@gmail.com",
+        "senha": "$2y$10$ogQeeBpmm..3Es\/pdkpglu5X1YmbddR8l0bLE8Tf1FKVI3yRMERvS",
+        "status": 1,
+        "token": "9383a07e17045530aa06d0fa0b3c8222",
+        "id": "user_69f9e4a2ba45b"
     }
 ]
