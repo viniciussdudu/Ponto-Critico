@@ -47,19 +47,28 @@ switch ($url) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav>
-<a href="index.php?url=home">Home</a> |
-<?php if (isset($_SESSION['usuario_id'])): ?>
-<span>Bem-vindo, <?= $_SESSION['usuario_nome'] ?>!</span> |
+<header class="barra-superior">
+    <div class="barra-conteudo">
+        <a href="index.php?url=home" class="mini-brand">
+            <img src="img/nome.pontocritico.png" alt="Ponto Crítico">
+            <span>Ponto Crítico</span>
+        </a>
 
-<a href="index.php?url=perfil">Meu Perfil</a> |
+        <nav class="menu-topo">
+            <a href="index.php?url=home">Home</a>
 
-<a href="index.php?url=auth/logout">Sair</a>
-<?php else: ?>
-<a href="index.php?url=login">Login</a> |
-<a href="index.php?url=cadastro">Cadastrar Conta</a>
-<?php endif; ?>
-</nav>
+            <?php if (isset($_SESSION['usuario_id'])): ?>
+                <a href="index.php?url=cadastrar-midia">Cadastrar Mídia</a>
+                <a href="index.php?url=perfil">Perfil</a>
+                <a href="index.php?url=auth/logout" class="menu-destaque">Sair</a>
+            <?php else: ?>
+                <a href="index.php?url=login">Login</a>
+                <a href="index.php?url=recuperar-senha">Recuperar Senha</a>
+                <a href="index.php?url=cadastro" class="menu-destaque">Cadastrar</a>
+            <?php endif; ?>
+        </nav>
+    </div>
+</header>
 <hr>
 
 <?php
