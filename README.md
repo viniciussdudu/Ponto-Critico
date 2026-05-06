@@ -26,6 +26,8 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
 
 [sprint 2](https://github.com/viniciussdudu/Ponto-Critico/blob/develop/docs/Sprints/Sprint%202_%20Edi%C3%A7%C3%A3o%20do%20perfil%20do%20usu%C3%A1rio%20e%20de%20avalia%C3%A7%C3%B5es%20pdf.pdf)
 
+[sprint 3](https://github.com/viniciussdudu/Ponto-Critico/blob/develop/docs/Sprints/Sprint%203_%20Edi%C3%A7%C3%A3o%20do%20perfil%20do%20usu%C3%A1rio%20e%20de%20avalia%C3%A7%C3%B5es.pdf)
+
 ## Como Rodar o Projeto Localmente
 
 1.  Certifique-se de ter o **PHP 8.x** instalado.
