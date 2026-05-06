@@ -14,7 +14,7 @@
         "status": 1,
         "token": null,
         "id": "user_69f8e7fda6c23",
-        "recuperar_token": null
+        "recuperar_token": "8b7e7794fc8e5a05141ef3e02e5ed1e7"
     },
     {
         "nome": "junior",
@@ -39,5 +39,29 @@
         "status": 1,
         "token": "9383a07e17045530aa06d0fa0b3c8222",
         "id": "user_69f9e4a2ba45b"
+    },
+    {
+        "nome": "viniciusgg",
+        "email": "viniciusgg@gmail.com",
+        "senha": "$2y$12$WRmx4KbAlAGoGqjXVi15JeWS8oK55zDY0NYWYxCH72E4bANegho4.",
+        "status": 0,
+        "token": "bc402ddd1e89d8292fff7115e7bbb3d3",
+        "id": "user_69fa647243062"
+    },
+    {
+        "nome": "vinicius",
+        "email": "viniteste1@gmail.com",
+        "senha": "$2y$12$pHMMtA7cwbJu5sftZyBkpewSEpc0C8UhWQrm\/d11B7OoPCamE1RAm",
+        "status": 0,
+        "token": "8625503fc819904e1446b60057cf257e",
+        "id": "user_69fa66c45e937"
+    },
+    {
+        "nome": "vinicius",
+        "email": "viniteste2@gmail.com",
+        "senha": "$2y$12$ZbnkGaVtdJBd\/xprtluvneex6wgdkBn8c2B9mybkNZHfqcuQRuLq.",
+        "status": 1,
+        "token": null,
+        "id": "user_69fa68226c9a3"
     }
 ]
