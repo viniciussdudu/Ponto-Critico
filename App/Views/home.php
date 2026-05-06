@@ -13,15 +13,15 @@
             <?php if (isset($_SESSION['usuario']) && isset($_SESSION['usuario']['tipo']) && $_SESSION['usuario']['tipo'] === 'admin'): ?>
                 <a class="btn" href="index.php?url=cadastrar-midia">Cadastrar Nova Mídia</a>
             <?php endif; ?>
-            <a class="btn btn-secundario" href="index.php?url=cadastro">Criar Conta</a>
-            <a class="btn btn-secundario" href="index.php?url=recuperar-senha">Recuperar Acesso</a>
+
+            
+            
         </div>
     </header>
 
     <main class="grid-home">
         <section class="card">
             <h2>Mídias Cadastradas</h2>
-
             <?php if (!empty($midias)): ?>
                 <div class="lista-cards">
                     <?php foreach ($midias as $midia): ?>
@@ -45,7 +45,10 @@
         </section>
 
         <section class="card">
+             <a class="btn btn-secundario" href="index.php?url=avaliar">Avaliar Mídia</a>
             <h2>Avaliações Recentes</h2>
+
+           
 
             <?php if (!empty($avaliacoes)): ?>
                 <div class="lista-avaliacoes">

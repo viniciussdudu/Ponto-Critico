@@ -13,6 +13,8 @@ spl_autoload_register(function ($class) {
 
 $url = $_GET['url'] ?? 'home';
 
+
+
 // 1. PRIMEIRO O ROTEADOR (Lógica de processamento)
 // Se houver um header() lá dentro, ele será executado antes de qualquer HTML
 ob_start(); // Dica extra: Inicia o buffer de saída para evitar erros de cabeçalho
@@ -47,6 +49,7 @@ switch ($url) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ponto Crítico</title>
+    <link rel="icon" type="image/png" href="/img/icone.pontocritico.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
