@@ -13,13 +13,48 @@ spl_autoload_register(function ($class) {
 
 $url = $_GET['url'] ?? 'home';
 
-
+if (
+    !isset($_SESSION['aceitou_termos']) &&
+    $url !== 'termos' &&
+    $url !== 'termos/aceitar'
+) {
+    header('Location: index.php?url=termos');
+    exit;
+}
 
 // 1. PRIMEIRO O ROTEADOR (Lógica de processamento)
 // Se houver um header() lá dentro, ele será executado antes de qualquer HTML
 ob_start(); // Dica extra: Inicia o buffer de saída para evitar erros de cabeçalho
 
 switch ($url) {
+    case 'termos/aceitar':
+    $dataNascimento = $_POST['data_nascimento'] ?? '';
+
+    if (
+        empty($dataNascimento) ||
+        empty($_POST['aceite_termos']) ||
+        empty($_POST['aceite_privacidade'])
+    ) {
+        header('Location: index.php?url=termos&erro=1');
+        exit;
+    }
+
+    $nascimento = new DateTime($dataNascimento);
+    $hoje = new DateTime();
+    $idade = $hoje->diff($nascimento)->y;
+
+    if ($idade < 13) {
+        header('Location: index.php?url=termos&erro=idade');
+        exit;
+    }
+
+    $_SESSION['aceitou_termos'] = true;
+    $_SESSION['data_nascimento'] = $dataNascimento;
+    $_SESSION['idade_usuario'] = $idade;
+
+    header('Location: index.php?url=home');
+    exit;
+
     case 'auth/login':
         $controller = new \App\Controllers\AuthController();
         $controller->login();
@@ -39,6 +74,26 @@ switch ($url) {
         $controller = new \App\Controllers\AvaliacaoController();
         $controller->atualizar();
         break;
+
+    case 'avaliacao/salvar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->salvar();
+        break;
+
+    case 'avaliacao/like':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->like();
+        break;
+
+    case 'avaliacao/deslike':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->deslike();
+        break;
+        
+    case 'avaliacao/comentar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->comentar();
+    break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
@@ -93,6 +148,10 @@ switch ($url) {
     require_once __DIR__ . '/../App/Views/home.php';
     break;
 
+    case 'termos':
+    require_once __DIR__ . '/../App/Views/termos.php';
+    break;
+
     case 'cadastro':
         require_once __DIR__ . '/../App/Views/cadastro.php';
         break;
@@ -135,12 +194,6 @@ switch ($url) {
     $controller->criar(); // Isso vai chamar o require_once para Views/avaliacao.php
     break;
 
-    case 'avaliacao/salvar':
-        $controller = new \App\Controllers\AvaliacaoController();
-        $controller->salvar();
-        break;
-
-
     case 'cadastrar-midia':
         if (!isset($_SESSION['usuario_id'])) {
             header('Location: index.php?url=login&erro=restrito');
@@ -174,6 +227,11 @@ case 'avaliacao/editar':
         $controller = new \App\Controllers\AvaliacaoController();
         $controller->editar();
         break;
+
+case 'avaliacao/ver':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->ver();
+    break;
 }
 ?>
 </body>

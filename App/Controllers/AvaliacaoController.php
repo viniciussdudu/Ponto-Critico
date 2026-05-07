@@ -130,4 +130,76 @@ class AvaliacaoController
         header('Location: index.php?url=home&sucesso=avaliacao_atualizada');
         exit;
     }
+
+    // ===================== Ver avaliação (detalhes)
+public function ver(): void
+{
+    $id = $_GET['id'] ?? null;
+
+    if (!$id) {
+        header('Location: index.php?url=home');
+        exit;
+    }
+
+    $model = new AvaliacaoModel();
+    $avaliacao = $model->obterPorId($id);
+
+    if (!$avaliacao) {
+        header('Location: index.php?url=home');
+        exit;
+    }
+
+    require_once __DIR__ . '/../Views/ver_avaliacao.php';
+}
+
+public function like(): void
+{
+    $id = $_GET['id'] ?? null;
+    $usuarioId = $_SESSION['usuario_id'] ?? 'visitante';
+
+    if ($id) {
+        $model = new AvaliacaoModel();
+        $model->adicionarLike($id, $usuarioId);
+    }
+
+    header('Location: index.php?url=avaliacao/ver&id=' . urlencode($id));
+    exit;
+}
+
+public function deslike(): void
+{
+    $id = $_GET['id'] ?? null;
+    $usuarioId = $_SESSION['usuario_id'] ?? 'visitante';
+
+    if ($id) {
+        $model = new AvaliacaoModel();
+        $model->adicionarDeslike($id, $usuarioId);
+    }
+
+    header('Location: index.php?url=avaliacao/ver&id=' . urlencode($id));
+    exit;
+}
+
+// ===================== Comentar em uma avaliação
+public function comentar(): void
+{
+    $id = $_POST['avaliacao_id'] ?? null;
+    $texto = trim($_POST['comentario'] ?? '');
+
+    if ($id && !empty($texto)) {
+        $model = new AvaliacaoModel();
+
+        $comentario = [
+            'usuario_id' => $_SESSION['usuario_id'] ?? 0,
+            'usuario_nome' => $_SESSION['usuario_nome'] ?? 'Usuário',
+            'texto' => $texto,
+            'data' => date('d/m/Y H:i')
+        ];
+
+        $model->adicionarComentario($id, $comentario);
+    }
+
+    header('Location: index.php?url=avaliacao/ver&id=' . urlencode($id));
+    exit;
+}
 }

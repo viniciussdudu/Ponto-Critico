@@ -5,7 +5,31 @@
         "midia_id": "mid_65f1a2b3c4d5e",
         "nota": 3,
         "comentario": "Uma obra-prima do terror! A atmosfera é incrível.",
-        "data_registro": "2026-04-06 14:30:00"
+        "data_registro": "2026-04-06 14:30:00",
+        "likes": [
+            "visitante"
+        ],
+        "deslikes": [],
+        "comentarios": [
+            {
+                "usuario_id": 0,
+                "usuario_nome": "Usuário",
+                "texto": "ggh",
+                "data": "07\/05\/2026 07:15"
+            },
+            {
+                "usuario_id": 0,
+                "usuario_nome": "Usuário",
+                "texto": "hedehfhgfrjh",
+                "data": "07\/05\/2026 07:32"
+            },
+            {
+                "usuario_id": 0,
+                "usuario_nome": "Usuário",
+                "texto": "teste",
+                "data": "07\/05\/2026 07:46"
+            }
+        ]
     },
     {
         "id": "rev_76g2b3c",

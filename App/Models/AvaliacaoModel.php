@@ -96,14 +96,16 @@ class AvaliacaoModel {
         return is_array($dados) ? $dados : [];
     }
     public function obterPorId($id) {
-        $avaliacoes = $this->carregarJson($this->pathAv);
-        foreach ($avaliacoes as $av) {
-            if ($av['id'] == $id) {
-                return $av;
-            }
+    $avaliacoes = $this->obterAvaliacoesCompletas();
+
+    foreach ($avaliacoes as $av) {
+        if ($av['id'] == $id) {
+            return $av;
         }
-        return null;
     }
+
+    return null;
+}
 
     public function atualizar($id, $novaNota, $novoComentario) {
         $avaliacoes = $this->carregarJson($this->pathAv);
@@ -111,7 +113,7 @@ class AvaliacaoModel {
 
         foreach ($avaliacoes as &$av) {
             if ($av['id'] == $id) {
-                $av['nota'] = (int) $novaNota;
+                $av['nota'] = (float) $novaNota;
                 $av['comentario'] = $novoComentario;
                 $atualizado = true;
                 break;
@@ -124,4 +126,93 @@ class AvaliacaoModel {
         }
         return false;
     }
+
+    public function adicionarLike($id, $usuarioId): bool {
+    $avaliacoes = $this->carregarJson($this->pathAv);
+
+    foreach ($avaliacoes as &$av) {
+        if ($av['id'] == $id) {
+            if (!isset($av['likes']) || !is_array($av['likes'])) {
+                $av['likes'] = [];
+            }
+
+            if (!isset($av['deslikes']) || !is_array($av['deslikes'])) {
+                $av['deslikes'] = [];
+            }
+
+            // Se já deu like, remove o like
+            if (in_array($usuarioId, $av['likes'])) {
+                $av['likes'] = array_values(array_diff($av['likes'], [$usuarioId]));
+            } else {
+                // Adiciona like
+                $av['likes'][] = $usuarioId;
+
+                // Remove deslike, caso exista
+                $av['deslikes'] = array_values(array_diff($av['deslikes'], [$usuarioId]));
+            }
+
+            return $this->persistir($avaliacoes);
+        }
+    }
+
+    return false;
+}
+
+public function adicionarDeslike($id, $usuarioId): bool {
+    $avaliacoes = $this->carregarJson($this->pathAv);
+
+    foreach ($avaliacoes as &$av) {
+        if ($av['id'] == $id) {
+            if (!isset($av['likes']) || !is_array($av['likes'])) {
+                $av['likes'] = [];
+            }
+
+            if (!isset($av['deslikes']) || !is_array($av['deslikes'])) {
+                $av['deslikes'] = [];
+            }
+
+            // Se já deu deslike, remove o deslike
+            if (in_array($usuarioId, $av['deslikes'])) {
+                $av['deslikes'] = array_values(array_diff($av['deslikes'], [$usuarioId]));
+            } else {
+                // Adiciona deslike
+                $av['deslikes'][] = $usuarioId;
+
+                // Remove like, caso exista
+                $av['likes'] = array_values(array_diff($av['likes'], [$usuarioId]));
+            }
+
+            return $this->persistir($avaliacoes);
+        }
+    }
+
+    return false;
+}
+
+private function persistir($avaliacoes): bool {
+    return file_put_contents(
+        $this->pathAv,
+        json_encode($avaliacoes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+    ) !== false;
+}
+
+public function adicionarComentario($id, array $comentario): bool
+{
+    $avaliacoes = $this->carregarJson($this->pathAv);
+
+    foreach ($avaliacoes as &$av) {
+        if ($av['id'] == $id) {
+            if (!isset($av['comentarios']) || !is_array($av['comentarios'])) {
+                $av['comentarios'] = [];
+            }
+
+            $av['comentarios'][] = $comentario;
+
+            return $this->persistir($avaliacoes);
+        }
+    }
+
+    return false;
+}
+
 }
