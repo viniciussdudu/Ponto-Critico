@@ -69,9 +69,15 @@
                                 “<?= htmlspecialchars($av['comentario'] ?? '') ?>”
                             </p>
 
-                            <a href="index.php?url=avaliacao/editar&id=<?= urlencode($av['id']) ?>" class="btn btn-inline btn-secundario">
-                                Editar Avaliação
-                            </a>
+                            <div class="acoes-avaliacao">
+    <a href="index.php?url=avaliacao/ver&id=<?= urlencode($av['id']) ?>" class="btn btn-inline">
+        Ver Avaliação
+    </a>
+
+    <a href="index.php?url=avaliacao/editar&id=<?= urlencode($av['id']) ?>" class="btn btn-inline btn-secundario">
+        Editar
+    </a>
+</div>
                         </div>
                     <?php endforeach; ?>
                 </div>

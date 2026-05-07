@@ -675,6 +675,334 @@ button,
     color: #fff !important;
 }
 
+.termos-page {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 42px 20px;
+    background:
+        radial-gradient(circle at top left, rgba(0, 192, 48, 0.16), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(69, 85, 102, 0.28), transparent 35%),
+        #14181c;
+}
+
+.termos-card {
+    width: 100%;
+    max-width: 640px;
+    background: #1f252b;
+    border: 1px solid #2c3440;
+    border-radius: 18px;
+    padding: 34px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+}
+
+.termos-brand {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.termos-brand img {
+    width: 140px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 14px;
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35));
+}
+
+.termos-brand h1 {
+    color: #ffffff;
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.termos-brand p {
+    color: #9ab;
+    line-height: 1.5;
+}
+
+.termos-box.premium {
+    background: #14181c;
+    border: 1px solid #2c3440;
+    border-radius: 14px;
+    padding: 18px;
+    margin: 18px 0;
+    max-height: 230px;
+    overflow-y: auto;
+}
+
+.termos-box.premium h2 {
+    color: #ffffff;
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.termos-box.premium p {
+    color: #c8d4df;
+    line-height: 1.55;
+    margin-bottom: 16px;
+}
+
+.checkbox-linha {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #d8e0e8;
+    margin-bottom: 14px;
+    font-weight: 600;
+}
+
+.checkbox-linha input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: #00c030;
+}
+
+.checkbox-linha span {
+    line-height: 1.4;
+}
+
+.btn-reacao {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.92rem;
+    border: 1px solid #2c3440;
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-reacao span {
+    background: rgba(255, 255, 255, 0.14);
+    padding: 3px 8px;
+    border-radius: 999px;
+}
+
+.btn-reacao.like {
+    background: #24313a;
+    color: #c8d4df;
+}
+
+.btn-reacao.deslike {
+    background: #24313a;
+    color: #c8d4df;
+}
+
+.btn-reacao.like.ativo {
+    background: #00c030;
+    color: white;
+    box-shadow: 0 0 18px rgba(0, 192, 48, 0.35);
+}
+
+.btn-reacao.deslike.ativo {
+    background: #ef4444;
+    color: white;
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
+}
+
+.btn-reacao:hover {
+    transform: translateY(-2px) scale(1.03);
+    filter: brightness(1.08);
+    text-decoration: none;
+}
+
+.btn-reacao:active {
+    transform: scale(0.94);
+}
+
+/* ===================== PÁGINA VER AVALIAÇÃO ===================== */
+
+.card-detalhe-avaliacao {
+    max-width: 850px;
+    margin: 48px auto;
+    padding: 28px;
+    background: #1f252b;
+    border: 1px solid #2c3440;
+    border-radius: 16px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.card-detalhe-avaliacao h1 {
+    text-align: left;
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.link-voltar {
+    display: inline-block;
+    margin-bottom: 24px;
+    color: #00c030;
+    font-weight: 700;
+}
+
+.avaliacao-detalhe-box {
+    background: #14181c;
+    border: 1px solid #2c3440;
+    border-radius: 14px;
+    padding: 20px;
+    margin: 22px 0;
+}
+
+.comentario-detalhe {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-top: 14px;
+}
+
+.acoes-avaliacao {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.separador {
+    border: none;
+    border-top: 1px solid #2c3440;
+    margin: 30px 0;
+}
+
+.card-detalhe-avaliacao h2 {
+    color: #fff;
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+}
+
+.lista-comentarios {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.comentario-card {
+    background: #14181c;
+    border: 1px solid #2c3440;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.comentario-card strong {
+    display: block;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.comentario-card p {
+    color: #d8e0e8;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.comentario-card small {
+    color: #9ab;
+    font-size: 0.85rem;
+}
+
+.form-comentario {
+    background: #14181c;
+    border: 1px solid #2c3440;
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 24px;
+}
+
+.form-comentario label {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.form-comentario textarea {
+    min-height: 110px;
+    background: #2c3440;
+    color: #fff;
+    border: 1px solid #3f4b57;
+}
+
+.form-comentario button {
+    margin-top: 6px;
+}
+
+@media (max-width: 700px) {
+    .card-detalhe-avaliacao {
+        margin: 24px 16px;
+        padding: 22px;
+    }
+
+    .card-detalhe-avaliacao h1 {
+        font-size: 1.6rem;
+    }
+
+    .acoes-avaliacao {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .acoes-avaliacao .btn,
+    .acoes-avaliacao .btn-reacao {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ===================== COMENTÁRIOS MAIS COMPACTOS ===================== */
+
+.card-detalhe-avaliacao {
+    max-width: 760px;
+}
+
+.separador {
+    margin: 22px 0;
+}
+
+.lista-comentarios {
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.comentario-card {
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+.comentario-card strong {
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+}
+
+.comentario-card p {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    line-height: 1.35;
+}
+
+.comentario-card small {
+    font-size: 0.78rem;
+}
+
+.form-comentario {
+    padding: 12px;
+    margin-top: 14px;
+    border-radius: 10px;
+}
+
+.form-comentario textarea {
+    min-height: 75px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+}
+
+.form-comentario button {
+    padding: 10px 14px;
+}
+
+
 @media (max-width: 900px) {
     .grid-home {
         grid-template-columns: 1fr;
