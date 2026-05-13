@@ -54,5 +54,13 @@
         "genero": "Drama",
         "data_lancamento": "2015-08-07",
         "sinopse": "\"Mãe\", do rapper Emicida, é uma homenagem emocionante à sua mãe, Dona Jacira, lançada no álbum Sobre Crianças, Quadris, Pesadelos e Lições de Casa... (2015). A canção, que conta com a participação de Dona Jacira declamando, retrata a luta, força e resiliência das mulheres negras, narrando o nascimento do rapper e memórias da infância com intensa carga emocional."
+    },
+    {
+        "id": "mid_b1223237d2d798",
+        "titulo": "O Grande Hotel Budapeste",
+        "tipo": "Filme",
+        "genero": "Comédia",
+        "data_lancamento": "2014-07-03",
+        "sinopse": "Na década de 1930, o gerente de um famoso hotel europeu torna-se muito amigo de um jovem companheiro de trabalho. Os dois acabam se envolvendo no roubo de um famoso quadro de valor inestimável e na batalha por uma fortuna de família. O filme mostra as mudanças históricas na Europa que ocorreram durante os anos 20."
     }
 ]

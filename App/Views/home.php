@@ -9,10 +9,16 @@
             </div>
         </div>
 
+        
+
         <div class="acoes-topo">
-            <?php if (isset($_SESSION['usuario']) && isset($_SESSION['usuario']['tipo']) && $_SESSION['usuario']['tipo'] === 'admin'): ?>
-                <a class="btn" href="index.php?url=cadastrar-midia">Cadastrar Nova Mídia</a>
-            <?php endif; ?>
+    <?php 
+    // Usamos o operador '===' (três iguais) para garantir que seja EXATAMENTE a string admin
+    if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): 
+    ?>
+        <a class="btn" href="index.php?url=cadastrar-midia">Cadastrar Nova Mídia</a>
+    <?php endif; ?>
+</div>
 
             
             

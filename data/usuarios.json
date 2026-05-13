@@ -59,9 +59,19 @@
     {
         "nome": "vinicius",
         "email": "viniteste2@gmail.com",
-        "senha": "$2y$12$ZbnkGaVtdJBd\/xprtluvneex6wgdkBn8c2B9mybkNZHfqcuQRuLq.",
+        "senha": "$2y$12$q8sOzEfy2NbQS6EM41aZdO3u.PWmaTJVwNsWkHO9046L4huFQyJxW",
         "status": 1,
         "token": null,
-        "id": "user_69fa68226c9a3"
+        "id": "user_69fa68226c9a3",
+        "tipo": "admin",
+        "recuperar_token": null
+    },
+    {
+        "nome": "pedro",
+        "email": "pedro@gmail.com",
+        "senha": "$2y$12$SbZ58AFQFJW9L9hlc01n3OyYrdIwSyYwXwPmneDNxGKOxtQQY4pZq",
+        "status": 1,
+        "token": null,
+        "id": "user_6a03cbe806509"
     }
 ]
