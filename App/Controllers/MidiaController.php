@@ -2,19 +2,44 @@
 namespace App\Controllers;
 
 use App\Models\MidiaModel;
+use App\Models\Usuario; // 1. Importando o model de Usuario
 
 class MidiaController {
     private $model;
+    private $usuarioModel; // 2. Adicionando a propriedade
 
     public function __construct() {
         $this->model = new MidiaModel();
+        $this->usuarioModel = new Usuario(); // 3. Instanciando o model de Usuario
     }
 
     public function criar() {
+        // 4. Inicia a sessão se já não estiver iniciada
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // 5. Verifica se o usuário está logado e se é admin
+        if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'admin') {
+    header('Location: index.php?url=home&erro=acesso_negado');
+    exit;
+}
+
         require_once __DIR__ . '/../Views/cadastro_midia.php';
     }
 
     public function salvar() {
+        // Inicia a sessão se já não estiver iniciada
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Trava de segurança também no backend para impedir envios POST de usuários comuns
+        if (!isset($_SESSION['usuario_tipo']) || $_SESSION['usuario_tipo'] !== 'admin') {
+    header('Location: index.php?url=home&erro=acesso_negado');
+    exit;
+}
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $titulo = trim($_POST['titulo'] ?? '');
             $tipo = trim($_POST['tipo'] ?? '');
@@ -65,4 +90,4 @@ class MidiaController {
     public function obterMidias() {
         return $this->model->obterMidias();
     }
-}  
+}

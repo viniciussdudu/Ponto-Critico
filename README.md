@@ -9,7 +9,9 @@
 # Ponto-Crítico: Sistema de Review e Catálogo
 ## Visão geral:
 
-O Ponto Crítico é uma plataforma web desenvolvida para a centralização e compartilhamento de críticas e avaliações de mídias (filmes, séries, jogos e livros). O projeto nasceu da necessidade de criar um ambiente colaborativo onde entusiastas podem catalogar suas experiências culturais e interagir com as opiniões de outros usuários..
+O Ponto Crítico é uma plataforma web desenvolvida para a centralização e compartilhamento de críticas e avaliações de mídias (filmes, séries, jogos e livros). O projeto nasceu da necessidade de criar um ambiente colaborativo onde entusiastas podem catalogar suas experiências culturais e interagir com as opiniões de outros usuários.
+
+<img src="Public/img/logo2.pontocritico.png" alt="Ponto Crítico" width="1000px"/>
 
 
 ## Funcionalidades Principais:
@@ -22,19 +24,35 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
 
 ## Sprints
 
-[sprint 1](https://github.com/viniciussdudu/Ponto-Critico/blob/develop/docs/Sprints/Sprint%201_%20Cadastro%20e%20avalia%C3%A7%C3%A3o%20das%20m%C3%ADdias%20pdf.pdf)
+[sprint 1](docs/Sprints/Sprint%201_%20Cadastro%20e%20avalia%C3%A7%C3%A3o%20das%20m%C3%ADdias%20pdf.pdf) : [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/v1.0)
 
-[sprint 2](https://github.com/viniciussdudu/Ponto-Critico/blob/develop/docs/Sprints/Sprint%202_%20Edi%C3%A7%C3%A3o%20do%20perfil%20do%20usu%C3%A1rio%20e%20de%20avalia%C3%A7%C3%B5es%20pdf.pdf)
+[sprint 2](docs/Sprints/Sprint%202_%20Edi%C3%A7%C3%A3o%20do%20perfil%20do%20usu%C3%A1rio%20e%20de%20avalia%C3%A7%C3%B5es%20pdf.pdf) : [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/V2.0)
 
-## Como Rodar o Projeto Localmente
+[sprint 3](docs/Sprints/Sprint%203_%20Edi%C3%A7%C3%A3o%20do%20perfil%20do%20usu%C3%A1rio%20e%20de%20avalia%C3%A7%C3%B5es.pdf) : [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/V3.0)
+
+## user Stories
+
+[User Stories](docs/User%20Stories)
+
+
+## Como Exeecutar o Projeto Localmente
 
 1.  Certifique-se de ter o **PHP 8.x** instalado.
 2.  Clone o repositório:
     ```bash
     git clone [https://github.com/viniciussdudu/Ponto-Critico.git](https://github.com/viniciussdudu/Ponto-Critico.git)
     ```
-3.  Inicie o servidor embutido do PHP apontando para a pasta pública:
+
+3. Certifique-se de ter o Composer instalado.
+       No Terminal digite:
+     ```bash
+    composer install
+    ```
+
+4.  Inicie o servidor embutido do PHP apontando para a pasta pública:
     ```bash
     php -S localhost:8000 -t Public
     ```
-4.  Abra o navegador e acesse: `http://localhost:8000`
+5.  Abra o navegador e acesse: `http://localhost:8000`
+
+   

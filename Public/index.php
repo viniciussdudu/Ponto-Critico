@@ -1,4 +1,7 @@
 <?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
 session_start();
 
 spl_autoload_register(function ($class) {
@@ -10,11 +13,48 @@ spl_autoload_register(function ($class) {
 
 $url = $_GET['url'] ?? 'home';
 
+if (
+    !isset($_SESSION['aceitou_termos']) &&
+    $url !== 'termos' &&
+    $url !== 'termos/aceitar'
+) {
+    header('Location: index.php?url=termos');
+    exit;
+}
+
 // 1. PRIMEIRO O ROTEADOR (Lógica de processamento)
 // Se houver um header() lá dentro, ele será executado antes de qualquer HTML
 ob_start(); // Dica extra: Inicia o buffer de saída para evitar erros de cabeçalho
 
 switch ($url) {
+    case 'termos/aceitar':
+    $dataNascimento = $_POST['data_nascimento'] ?? '';
+
+    if (
+        empty($dataNascimento) ||
+        empty($_POST['aceite_termos']) ||
+        empty($_POST['aceite_privacidade'])
+    ) {
+        header('Location: index.php?url=termos&erro=1');
+        exit;
+    }
+
+    $nascimento = new DateTime($dataNascimento);
+    $hoje = new DateTime();
+    $idade = $hoje->diff($nascimento)->y;
+
+    if ($idade < 13) {
+        header('Location: index.php?url=termos&erro=idade');
+        exit;
+    }
+
+    $_SESSION['aceitou_termos'] = true;
+    $_SESSION['data_nascimento'] = $dataNascimento;
+    $_SESSION['idade_usuario'] = $idade;
+
+    header('Location: index.php?url=home');
+    exit;
+
     case 'auth/login':
         $controller = new \App\Controllers\AuthController();
         $controller->login();
@@ -34,6 +74,26 @@ switch ($url) {
         $controller = new \App\Controllers\AvaliacaoController();
         $controller->atualizar();
         break;
+
+    case 'avaliacao/salvar':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->salvar();
+        break;
+
+    case 'avaliacao/like':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->like();
+        break;
+
+    case 'avaliacao/deslike':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->deslike();
+        break;
+        
+    case 'avaliacao/comentar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->comentar();
+    break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
@@ -44,22 +104,36 @@ switch ($url) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ponto Crítico</title>
+    <link rel="icon" type="image/png" href="/img/icone.pontocritico.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav>
-<a href="index.php?url=home">Home</a> |
-<?php if (isset($_SESSION['usuario_id'])): ?>
-<span>Bem-vindo, <?= $_SESSION['usuario_nome'] ?>!</span> |
+<header class="barra-superior">
+    <div class="barra-conteudo">
+        <a href="index.php?url=home" class="mini-brand">
+            <img src="img/nome.pontocritico.png" alt="Ponto Crítico">
+            <span>Ponto Crítico</span>
+        </a>
 
-<a href="index.php?url=perfil">Meu Perfil</a> |
+        <nav class="menu-topo">
+            <a href="index.php?url=home">Home</a>
 
-<a href="index.php?url=auth/logout">Sair</a>
-<?php else: ?>
-<a href="index.php?url=login">Login</a> |
-<a href="index.php?url=cadastro">Cadastrar Conta</a>
-<?php endif; ?>
-</nav>
+            <?php if (isset($_SESSION['usuario_id'])): ?>
+                
+                <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+                    <a href="index.php?url=cadastrar-midia">Cadastrar Mídia</a>
+                <?php endif; ?>
+
+                <a href="index.php?url=perfil">Perfil</a>
+                <a href="index.php?url=auth/logout" class="menu-destaque">Sair</a>
+            <?php else: ?>
+                <a href="index.php?url=login">Login</a>
+                <a href="index.php?url=recuperar-senha">Recuperar Senha</a>
+                <a href="index.php?url=cadastro" class="menu-destaque">Cadastrar</a>
+            <?php endif; ?>
+        </nav>
+    </div>
+</header>
 <hr>
 
 <?php
@@ -78,11 +152,27 @@ switch ($url) {
     require_once __DIR__ . '/../App/Views/home.php';
     break;
 
+    case 'termos':
+    require_once __DIR__ . '/../App/Views/termos.php';
+    break;
+
     case 'cadastro':
         require_once __DIR__ . '/../App/Views/cadastro.php';
         break;
+
+    
     case 'login':
         require_once __DIR__ . '/../App/Views/login.php';
+        break;
+
+    case 'confirmar':
+        $controller = new App\Controllers\AuthController();
+        $controller->confirmar(); // Chama o método que processa o token
+        break;
+
+    case 'aviso-confirmacao':
+        // Rota para a view que avisa que o e-mail foi enviado
+        require_once __DIR__ . '/../App/Views/aviso-confirmacao.php';
         break;
     
     case 'recuperar-senha':
@@ -98,7 +188,7 @@ switch ($url) {
     require_once __DIR__ . '/../App/Views/redefinir.php';
     break;
 
-    case 'auth/confirmar-redefinicao':
+    case 'confirmar-redefinicao':
     $controller = new \App\Controllers\AuthController();
     $controller->confirmarRedefinicao();
     break;
@@ -107,12 +197,6 @@ switch ($url) {
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->criar(); // Isso vai chamar o require_once para Views/avaliacao.php
     break;
-
-    case 'avaliacao/salvar':
-        $controller = new \App\Controllers\AvaliacaoController();
-        $controller->salvar();
-        break;
-
 
     case 'cadastrar-midia':
         if (!isset($_SESSION['usuario_id'])) {
@@ -147,6 +231,11 @@ case 'avaliacao/editar':
         $controller = new \App\Controllers\AvaliacaoController();
         $controller->editar();
         break;
+
+case 'avaliacao/ver':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->ver();
+    break;
 }
 ?>
 </body>

@@ -3,15 +3,46 @@
         "id": "rev_65f1a2b",
         "usuario_id": "user_65f1a2b3c4d5e",
         "midia_id": "mid_65f1a2b3c4d5e",
-        "nota": 5,
-        "comentario": "Uma obra-prima do terror! A atmosfera \u00e9 incr\u00edvel.",
-        "data_registro": "2026-04-06 14:30:00"
+        "nota": 3,
+        "comentario": "Uma obra-prima do terror! A atmosfera é incrível.",
+        "data_registro": "2026-04-06 14:30:00",
+        "likes": [
+            "visitante",
+            "user_69fa68226c9a3"
+        ],
+        "deslikes": [],
+        "comentarios": [
+            {
+                "usuario_id": 0,
+                "usuario_nome": "Usuário",
+                "texto": "ggh",
+                "data": "07\/05\/2026 07:15"
+            },
+            {
+                "usuario_id": 0,
+                "usuario_nome": "Usuário",
+                "texto": "hedehfhgfrjh",
+                "data": "07\/05\/2026 07:32"
+            },
+            {
+                "usuario_id": 0,
+                "usuario_nome": "Usuário",
+                "texto": "teste",
+                "data": "07\/05\/2026 07:46"
+            },
+            {
+                "usuario_id": "user_69fa68226c9a3",
+                "usuario_nome": "vinicius",
+                "texto": "Nunca será o Exorcista!",
+                "data": "13\/05\/2026 01:18"
+            }
+        ]
     },
     {
         "id": "rev_76g2b3c",
         "usuario_id": "user_76g2b3c4d5e6f",
         "midia_id": "mid_76g2b3c4d5e6f",
-        "nota": 5,
+        "nota": 4,
         "comentario": "Jogo bom.",
         "data_registro": "2026-04-06 15:00:00"
     },
@@ -36,7 +67,15 @@
         "midia_id": "mid_bcc377f0c962db",
         "usuario_id": "user_69dbaee48fa3e",
         "nota": 5,
-        "comentario": "Gostei Muito do Filme! finalmente um filme de vampiro que \u00e9 bom!",
+        "comentario": "Gostei Muito do Filme! finalmente um filme de vampiro que é bom!",
         "data": "12\/04\/2026 17:13"
+    },
+    {
+        "id": 1778019061,
+        "midia_id": "mid_23d16ebf7de30b",
+        "usuario_id": "user_69fa68226c9a3",
+        "nota": 5,
+        "comentario": "Bizarros",
+        "data": "05\/05\/2026 22:11"
     }
 ]
