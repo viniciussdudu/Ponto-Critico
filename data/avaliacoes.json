@@ -7,7 +7,8 @@
         "comentario": "Uma obra-prima do terror! A atmosfera é incrível.",
         "data_registro": "2026-04-06 14:30:00",
         "likes": [
-            "visitante"
+            "visitante",
+            "user_69fa68226c9a3"
         ],
         "deslikes": [],
         "comentarios": [
@@ -28,6 +29,12 @@
                 "usuario_nome": "Usuário",
                 "texto": "teste",
                 "data": "07\/05\/2026 07:46"
+            },
+            {
+                "usuario_id": "user_69fa68226c9a3",
+                "usuario_nome": "vinicius",
+                "texto": "Nunca será o Exorcista!",
+                "data": "13\/05\/2026 01:18"
             }
         ]
     },

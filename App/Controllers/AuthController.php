@@ -23,6 +23,7 @@ class AuthController {
                 // Login com sucesso!
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['usuario_nome'] = $usuario['nome'];
+                $_SESSION['usuario_tipo'] = $usuario['tipo'];
                 
                 header('Location: index.php?url=home');
                 exit();

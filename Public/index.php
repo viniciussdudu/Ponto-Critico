@@ -119,7 +119,11 @@ switch ($url) {
             <a href="index.php?url=home">Home</a>
 
             <?php if (isset($_SESSION['usuario_id'])): ?>
-                <a href="index.php?url=cadastrar-midia">Cadastrar Mídia</a>
+                
+                <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+                    <a href="index.php?url=cadastrar-midia">Cadastrar Mídia</a>
+                <?php endif; ?>
+
                 <a href="index.php?url=perfil">Perfil</a>
                 <a href="index.php?url=auth/logout" class="menu-destaque">Sair</a>
             <?php else: ?>
