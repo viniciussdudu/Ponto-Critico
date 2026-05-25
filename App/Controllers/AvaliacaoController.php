@@ -292,4 +292,87 @@ public function comentar(): void
         ], JSON_UNESCAPED_UNICODE);
         return;
     }
+
+    public function listarComentarios(): void
+    {
+        header('Content-Type: application/json; charset=UTF-8');
+
+        $avaliacaoId = $_GET['avaliacao_id'] ?? '';
+        if (empty($avaliacaoId)) {
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'Parâmetro avaliacao_id é obrigatório.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $model = new AvaliacaoModel();
+        $avaliacao = $model->obterPorId($avaliacaoId);
+
+        if (!$avaliacao) {
+            echo json_encode([], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $comentarios = $avaliacao['comentarios'] ?? [];
+        echo json_encode($comentarios, JSON_UNESCAPED_UNICODE);
+        return;
+    }
+
+    public function apiComentar(): void
+    {
+        header('Content-Type: application/json; charset=UTF-8');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'Método não permitido. Use POST.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        if (!isset($_SESSION['usuario_id'])) {
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'É necessário estar logado para enviar comentários.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $avaliacaoId = $_POST['avaliacao_id'] ?? '';
+        $texto = trim($_POST['comentario'] ?? '');
+
+        if (empty($avaliacaoId) || empty($texto)) {
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'avaliacao_id e comentario são obrigatórios.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $comentario = [
+            'usuario_id' => $_SESSION['usuario_id'],
+            'usuario_nome' => $_SESSION['usuario_nome'] ?? 'Usuário',
+            'texto' => $texto,
+            'data' => date('d/m/Y H:i')
+        ];
+
+        $model = new AvaliacaoModel();
+        $ok = $model->adicionarComentario($avaliacaoId, $comentario);
+
+        if (!$ok) {
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'Falha ao salvar comentário.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        echo json_encode([
+            'sucesso' => true,
+            'mensagem' => 'Comentário enviado com sucesso.',
+            'comentario' => $comentario
+        ], JSON_UNESCAPED_UNICODE);
+        return;
+    }
 }

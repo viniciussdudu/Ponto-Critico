@@ -101,25 +101,21 @@
         }
 
         const html = avaliacoes.map((av) => {
-            const comentarios = Array.isArray(av.comentarios) && av.comentarios.length > 0
-                ? `<div class="lista-comentarios">${av.comentarios.map((comentario) => `\
-                    <div class="comentario-card">\
-                        <strong>${comentario.usuario_nome || 'Usuário'}</strong>\
-                        <p>${comentario.texto || ''}</p>\
-                        <small>${comentario.data || ''}</small>\
-                    </div>\
-                `).join('')}</div>`
-                : '<p class="sem-comentarios">Sem comentários adicionais.</p>';
+            // Comentários serão carregados via API separada
+            const comentariosCount = Array.isArray(av.comentarios) ? av.comentarios.length : 0;
 
             return `\
-                <div class="avaliacao-card">\
+                <div class="avaliacao-card" data-avaliacao-id="${av.id}">\
                     <div class="avaliacao-topo">\
                         <strong>${av.usuario_nome || 'Usuário'}</strong>\
                         <span>${'★'.repeat(Math.round(av.nota || 0))} (${av.nota || 0}/5)</span>\
                     </div>\
                     <p class="comentario">${av.comentario || ''}</p>\
                     <p class="data-avaliacao">${av.data || ''}</p>\
-                    ${comentarios}\
+                    <div class="comentarios-actions">\
+                        <button class="btn-ver-comentarios" data-avaliacao-id="${av.id}">Ver comentários (${comentariosCount})</button>\
+                    </div>\
+                    <div class="comentarios-container" id="comentarios-${av.id}"></div>\
                 </div>\
             `;
         }).join('');
@@ -149,6 +145,96 @@
             listaContainer.innerHTML = '<p>Erro ao carregar avaliações.</p>';
         }
     }
+
+    // --- Comentários via API ---
+    const isLoggedIn = <?= isset($_SESSION['usuario_id']) ? 'true' : 'false' ?>;
+
+    async function carregarComentarios(avaliacaoId) {
+        const container = document.getElementById(`comentarios-${avaliacaoId}`);
+        if (!container) return;
+        container.innerHTML = '<p>Carregando comentários...</p>';
+
+        try {
+            const resp = await fetch(`index.php?url=api/comentarios/listar&avaliacao_id=${encodeURIComponent(avaliacaoId)}`);
+            const dados = await resp.json();
+            if (!resp.ok) {
+                container.innerHTML = `<p class="erro">${dados.mensagem || 'Erro ao carregar comentários.'}</p>`;
+                return;
+            }
+
+            if (!Array.isArray(dados) || dados.length === 0) {
+                container.innerHTML = '<p class="sem-comentarios">Sem comentários.</p>' + (isLoggedIn ? buildComentarioForm(avaliacaoId) : '<p><a href="index.php?url=login">Faça login</a> para comentar.</p>');
+                return;
+            }
+
+            const html = dados.map(c => `\
+                <div class="comentario-card">\
+                    <strong>${c.usuario_nome || 'Usuário'}</strong>\
+                    <p>${c.texto || ''}</p>\
+                    <small>${c.data || ''}</small>\
+                </div>\
+            `).join('') + (isLoggedIn ? buildComentarioForm(avaliacaoId) : '<p><a href="index.php?url=login">Faça login</a> para comentar.</p>');
+
+            container.innerHTML = html;
+            // attach submit handler for this form
+            const form = container.querySelector('.comentario-form');
+            if (form) form.addEventListener('submit', (e) => enviarComentario(e, avaliacaoId));
+        } catch (err) {
+            container.innerHTML = '<p class="erro">Erro de rede ao carregar comentários.</p>';
+        }
+    }
+
+    function buildComentarioForm(avaliacaoId) {
+        return `\
+            <form class="comentario-form" data-avaliacao-id="${avaliacaoId}">\
+                <textarea name="comentario" rows="2" required placeholder="Escreva seu comentário..."></textarea>\
+                <button type="submit">Enviar comentário</button>\
+            </form>\
+        `;
+    }
+
+    async function enviarComentario(event, avaliacaoId) {
+        event.preventDefault();
+        const form = event.target;
+        const texto = form.querySelector('textarea[name="comentario"]').value.trim();
+        if (!texto) return;
+
+        const formData = new FormData();
+        formData.append('avaliacao_id', avaliacaoId);
+        formData.append('comentario', texto);
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+
+        try {
+            const resp = await fetch('index.php?url=api/comentarios/enviar', { method: 'POST', body: formData });
+            const dados = await resp.json();
+            if (!resp.ok) {
+                mostrarMensagem(dados.mensagem || 'Erro ao enviar comentário.', 'erro');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar comentário';
+                return;
+            }
+
+            mostrarMensagem('Comentário enviado com sucesso!');
+            // recarrega comentários
+            carregarComentarios(avaliacaoId);
+        } catch (err) {
+            mostrarMensagem('Erro de rede ao enviar comentário.', 'erro');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Enviar comentário';
+        }
+    }
+
+    // Delegation for "Ver comentários" buttons
+    document.addEventListener('click', function (ev) {
+        const btn = ev.target.closest('.btn-ver-comentarios');
+        if (!btn) return;
+        const aid = btn.getAttribute('data-avaliacao-id');
+        carregarComentarios(aid);
+    });
 
     async function enviarAvaliacao(event) {
         event.preventDefault();
