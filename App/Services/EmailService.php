@@ -31,7 +31,7 @@ class EmailService {
             $mail->CharSet = 'UTF-8';
             $mail->Subject = $assunto;
             $mail->Body    = $corpo;
-
+            
             // Envia o objeto que foi configurado!
             return $mail->send();
             

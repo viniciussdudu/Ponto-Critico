@@ -20,6 +20,10 @@
     <?php endif; ?>
 </div>
 
+<?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+    <a href="index.php?url=admin/logs" class="btn-admin">Ver Logs do Sistema</a>
+<?php endif; ?>
+
             
             
         </div>
@@ -53,6 +57,8 @@
         <section class="card">
              <a class="btn btn-secundario" href="index.php?url=avaliar">Avaliar Mídia</a>
             <h2>Avaliações Recentes</h2>
+
+        
 
            
 

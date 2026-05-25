@@ -24,6 +24,33 @@ class AuthController {
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['usuario_nome'] = $usuario['nome'];
                 $_SESSION['usuario_tipo'] = $usuario['tipo'];
+
+                // ==================== INÍCIO DA FEATURE DE LOGS ====================
+    $caminhoLogs = __DIR__ . '/../../data/logs_acesso.json';
+    
+    // 1. Lê os logs existentes (se o arquivo não existir, começa com um array vazio)
+    $logs = [];
+    if (file_exists($caminhoLogs)) {
+        $logs = json_decode(file_get_contents($caminhoLogs), true) ?? [];
+    }
+
+    // 2. Cria o novo registro de log
+    $novoLog = [
+        'usuario_email' => $usuario['email'],
+        'data_hora' => date('Y-m-d H:i:s'),
+        'ip' => $_SERVER['REMOTE_ADDR'] === '::1' ? '127.0.0.1' : $_SERVER['REMOTE_ADDR'],
+        'evento' => 'Login realizado com sucesso'
+    ];
+
+    // 3. Coloca o novo log no TOPO da lista (assim os mais recentes aparecem primeiro)
+    array_unshift($logs, $novoLog);
+
+    // 4. Limita para guardar apenas os últimos 50 logs (para o arquivo não crescer infinitamente)
+    $logs = array_slice($logs, 0, 50);
+
+    // 5. Salva de volta no arquivo JSON
+    file_put_contents($caminhoLogs, json_encode($logs, JSON_PRETTY_PRINT));
+
                 
                 header('Location: index.php?url=home');
                 exit();

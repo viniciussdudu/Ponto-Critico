@@ -50,4 +50,37 @@ class UsuarioController {
             echo "Erro ao atualizar perfil.";
         }
     }
+
+    public function listarLogs() {
+    // 1. Inicia a sessão se já não estiver iniciada
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // 2. Configura o cabeçalho para responder JSON puro
+    header('Content-Type: application/json');
+
+    // 3. TRAVA DE SEGURANÇA: Só o admin logado pode ver
+    if (!isset($_SESSION['usuario_tipo']) || $_SESSION['usuario_tipo'] !== 'admin') {
+        http_response_code(403); // Código HTTP de Proibido/Não Autorizado
+        echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'Acesso negado. Apenas administradores podem ver os logs.'
+        ]);
+        exit;
+    }
+
+    // 4. Busca os dados no arquivo JSON
+    $caminhoLogs = __DIR__ . '/../../data/logs_acesso.json';
+    
+    $logs = [];
+    if (file_exists($caminhoLogs)) {
+        $logs = json_decode(file_get_contents($caminhoLogs), true) ?? [];
+    }
+
+    // 5. Retorna os dados em formato JSON para quem chamou a API
+    echo json_encode($logs);
+    exit;
+}
+
 }
