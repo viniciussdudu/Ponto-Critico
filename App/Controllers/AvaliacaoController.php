@@ -202,4 +202,94 @@ public function comentar(): void
     header('Location: index.php?url=avaliacao/ver&id=' . urlencode($id));
     exit;
 }
+
+    public function listarPorMidia(): void
+    {
+        header('Content-Type: application/json; charset=UTF-8');
+
+        $midiaId = $_GET['midia_id'] ?? '';
+        if (empty($midiaId)) {
+            http_response_code(400);
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'Parâmetro midia_id é obrigatório.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $model = new AvaliacaoModel();
+        $avaliacoes = $model->obterAvaliacoesCompletas();
+        $resultado = array_values(array_filter($avaliacoes, function ($avaliacao) use ($midiaId) {
+            return isset($avaliacao['midia_id']) && $avaliacao['midia_id'] === $midiaId;
+        }));
+
+        echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
+        return;
+    }
+
+    public function apiSalvar(): void
+    {
+        header('Content-Type: application/json; charset=UTF-8');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'Método não permitido. Use POST.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        if (!isset($_SESSION['usuario_id'])) {
+            http_response_code(401);
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'É necessário estar logado para enviar avaliações.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $midiaId = $_POST['midia_id'] ?? '';
+        $nota = isset($_POST['nota']) ? (float) $_POST['nota'] : 0;
+        $comentario = trim($_POST['comentario'] ?? '');
+
+        if (empty($midiaId) || $nota < 0.5 || $nota > 5 || empty($comentario)) {
+            http_response_code(400);
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'midia_id, nota (0.5 a 5) e comentario são obrigatórios.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $novaAvaliacao = [
+            'id' => time(),
+            'midia_id' => $midiaId,
+            'usuario_id' => $_SESSION['usuario_id'],
+            'usuario_nome' => $_SESSION['usuario_nome'] ?? 'Usuário',
+            'nota' => $nota,
+            'comentario' => $comentario,
+            'data' => date('d/m/Y H:i'),
+            'comentarios' => []
+        ];
+
+        $model = new AvaliacaoModel();
+
+        if (!$model->salvar($novaAvaliacao)) {
+            http_response_code(500);
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'Falha ao salvar a avaliação.'
+            ], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        http_response_code(201);
+        echo json_encode([
+            'sucesso' => true,
+            'mensagem' => 'Avaliação enviada com sucesso.',
+            'avaliacao' => $novaAvaliacao
+        ], JSON_UNESCAPED_UNICODE);
+        return;
+    }
 }

@@ -237,6 +237,16 @@ case 'avaliacao/ver':
     $controller->ver();
     break;
 
+case 'api/avaliacoes/listar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->listarPorMidia();
+    break;
+
+case 'api/avaliacoes/enviar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->apiSalvar();
+    break;
+
 case 'api/admin/logs':
     // Instancia o controller onde você colocou o método
     $controller = new \App\Controllers\ApiController(); 
