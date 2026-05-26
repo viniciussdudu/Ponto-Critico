@@ -94,6 +94,11 @@ switch ($url) {
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->comentar();
     break;
+
+    case 'api/midias/listar':
+        $controller = new \App\Controllers\MidiaController();
+        $controller->apiListarOuFiltrar();
+        break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
