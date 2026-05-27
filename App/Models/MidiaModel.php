@@ -17,4 +17,27 @@ class MidiaModel {
         $novoJson = json_encode($dadosNovos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         return file_put_contents($this->caminhoArquivo, $novoJson);
     }
+    public function buscarPorTitulo($titulo = '') {
+        $midias = $this->obterMidias();
+
+        if (!is_array($midias)) {
+            return [];
+        }
+
+        // Se nenhum título for enviado, retorna todas as mídias
+        if (empty(trim($titulo))) {
+            return $midias;
+        }
+
+        $tituloFiltrado = mb_strtolower(trim($titulo), 'UTF-8');
+
+        // Filtra o array buscando ocorrências do termo no título da mídia
+        $resultados = array_filter($midias, function($midia) use ($tituloFiltrado) {
+            $tituloMidia = mb_strtolower($midia['titulo'] ?? '', 'UTF-8');
+            return mb_strpos($tituloMidia, $tituloFiltrado) !== false;
+        });
+
+        // array_values garante que os índices numéricos do JSON fiquem sequenciais ([0, 1, 2...])
+        return array_values($resultados);
+    }
 }
