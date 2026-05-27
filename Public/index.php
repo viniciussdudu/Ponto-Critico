@@ -99,6 +99,11 @@ switch ($url) {
         $controller = new \App\Controllers\MidiaController();
         $controller->apiListarOuFiltrar();
         break;
+
+    case 'api/midias/excluir-rapida':
+    $controller = new \App\Controllers\MidiaController();
+    $controller->apiExcluirRapida();
+    break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)

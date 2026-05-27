@@ -40,4 +40,26 @@ class MidiaModel {
         // array_values garante que os índices numéricos do JSON fiquem sequenciais ([0, 1, 2...])
         return array_values($resultados);
     }
+
+    public function excluirPorId($id) {
+    $midias = $this->obterMidias();
+
+    if (!is_array($midias)) {
+        return false;
+    }
+
+    $quantidadeAntes = count($midias);
+
+    $midiasFiltradas = array_filter($midias, function($midia) use ($id) {
+        return ($midia['id'] ?? '') !== $id;
+    });
+
+    $midiasFiltradas = array_values($midiasFiltradas);
+
+    if (count($midiasFiltradas) === $quantidadeAntes) {
+        return false;
+    }
+
+    return $this->atualizarMidias($midiasFiltradas);
+}
 }
