@@ -90,4 +90,82 @@ class MidiaController {
     public function obterMidias() {
         return $this->model->obterMidias();
     }
+    public function apiListarOuFiltrar() {
+        // Captura o termo de busca enviado na URL (ex: ?titulo=Vingadores)
+        $titulo = $_GET['titulo'] ?? '';
+
+        // Obtém os dados filtrados ou completos do Model
+        $resultados = $this->model->buscarPorTitulo($titulo);
+
+        // Limpa qualquer saída residual antes de enviar o JSON
+        if (ob_get_length()) {
+            ob_clean();
+        }
+
+        // Configura o cabeçalho para resposta JSON
+        header('Content-Type: application/json; charset=utf-8');
+
+        // Emite os dados e encerra o script imediatamente
+        echo json_encode($resultados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+public function apiExcluirRapida() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (ob_get_length()) {
+        ob_clean();
+    }
+
+    header('Content-Type: application/json; charset=utf-8');
+
+    if (!isset($_SESSION['usuario_tipo']) || $_SESSION['usuario_tipo'] !== 'admin') {
+        http_response_code(403);
+        echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'Acesso negado. Apenas administradores podem excluir mídias.'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'Método não permitido. Use POST.'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    $id = $_POST['id'] ?? '';
+
+    if (empty($id)) {
+        http_response_code(400);
+        echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'ID da mídia não informado.'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    $excluiu = $this->model->excluirPorId($id);
+
+    if ($excluiu) {
+        echo json_encode([
+            'sucesso' => true,
+            'mensagem' => 'Mídia excluída com sucesso.'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    http_response_code(404);
+    echo json_encode([
+        'sucesso' => false,
+        'mensagem' => 'Mídia não encontrada.'
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 }

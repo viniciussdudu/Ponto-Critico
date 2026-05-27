@@ -30,12 +30,14 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
 
 [sprint 3](docs/Sprints/Sprint%203_%20Edi%C3%A7%C3%A3o%20do%20perfil%20do%20usu%C3%A1rio%20e%20de%20avalia%C3%A7%C3%B5es.pdf) : [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/V3.0)
 
+[sprint 4](docs/Sprints/Sprint%204_%20%20APIs,%20Mídias,%20Interação%20e%20Auditoria%20.pdf) : [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/V4.0)
+
 ## user Stories
 
 [User Stories](docs/User%20Stories)
 
 
-## Como Exeecutar o Projeto Localmente
+## Como Executar o Projeto Localmente
 
 1.  Certifique-se de ter o **PHP 8.x** instalado.
 2.  Clone o repositório:

@@ -94,6 +94,16 @@ switch ($url) {
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->comentar();
     break;
+
+    case 'api/midias/listar':
+        $controller = new \App\Controllers\MidiaController();
+        $controller->apiListarOuFiltrar();
+        break;
+
+    case 'api/midias/excluir-rapida':
+    $controller = new \App\Controllers\MidiaController();
+    $controller->apiExcluirRapida();
+    break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
@@ -236,6 +246,53 @@ case 'avaliacao/ver':
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->ver();
     break;
+
+case 'api/avaliacoes/listar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->listarPorMidia();
+    break;
+
+case 'api/avaliacoes/enviar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->apiSalvar();
+    break;
+
+case 'api/comentarios/listar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->listarComentarios();
+    break;
+
+case 'api/comentarios/enviar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->apiComentar();
+    break;
+
+case 'api/admin/logs':
+    // Instancia o controller onde você colocou o método
+    $controller = new \App\Controllers\ApiController(); 
+    $controller->listarLogs();
+    break;
+
+case 'admin/logs':
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+
+    if (!isset($_SESSION['usuario_tipo']) || $_SESSION['usuario_tipo'] !== 'admin') {
+        header('Location: index.php?url=home&erro=acesso_negado');
+        exit;
+    }
+
+    $caminhoLogs = __DIR__ . '/../data/logs_acesso.json';
+    $logs = [];
+    if (file_exists($caminhoLogs)) {
+        $logs = json_decode(file_get_contents($caminhoLogs), true) ?? [];
+    }
+
+    require_once __DIR__ . '/../app/Views/admin_logs.php';
+    break;
+
 }
 ?>
 </body>

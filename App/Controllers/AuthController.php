@@ -24,6 +24,30 @@ class AuthController {
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['usuario_nome'] = $usuario['nome'];
                 $_SESSION['usuario_tipo'] = $usuario['tipo'];
+
+                // ==================== INÍCIO DA FEATURE DE LOGS ====================
+    $caminhoLogs = __DIR__ . '/../../data/logs_acesso.json';
+    
+    $logs = [];
+    if (file_exists($caminhoLogs)) {
+        $logs = json_decode(file_get_contents($caminhoLogs), true) ?? [];
+    }
+
+    $novoLog = [
+        'usuario_email' => $usuario['email'],
+        'data_hora' => date('Y-m-d H:i:s'),
+        'ip' => $_SERVER['REMOTE_ADDR'] === '::1' ? '127.0.0.1' : $_SERVER['REMOTE_ADDR'],
+        'evento' => 'Login realizado com sucesso'
+    ];
+
+
+    array_unshift($logs, $novoLog);
+
+    
+    $logs = array_slice($logs, 0, 50);
+
+    file_put_contents($caminhoLogs, json_encode($logs, JSON_PRETTY_PRINT));
+
                 
                 header('Location: index.php?url=home');
                 exit();

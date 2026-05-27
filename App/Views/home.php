@@ -20,6 +20,10 @@
     <?php endif; ?>
 </div>
 
+<?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+    <a href="index.php?url=admin/logs" class="btn-admin">Ver Logs do Sistema</a>
+<?php endif; ?>
+
             
             
         </div>
@@ -40,6 +44,22 @@
                             <?php if (!empty($midia['sinopse'])): ?>
                                 <p><strong>Sinopse:</strong> <?= htmlspecialchars($midia['sinopse']) ?></p>
                             <?php endif; ?>
+
+
+                            <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+    <form 
+        method="POST" 
+        action="index.php?url=api/midias/excluir-rapida"
+        onsubmit="return confirm('Tem certeza que deseja excluir esta mídia? Esta ação não pode ser desfeita.');"
+        class="form-excluir-midia"
+    >
+        <input type="hidden" name="id" value="<?= htmlspecialchars($midia['id']) ?>">
+        <button type="submit" class="btn-excluir-midia">
+            Excluir mídia
+        </button>
+    </form>
+<?php endif; ?>
+
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -53,6 +73,8 @@
         <section class="card">
              <a class="btn btn-secundario" href="index.php?url=avaliar">Avaliar Mídia</a>
             <h2>Avaliações Recentes</h2>
+
+        
 
            
 
