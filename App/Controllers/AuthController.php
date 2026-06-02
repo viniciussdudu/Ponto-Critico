@@ -51,6 +51,9 @@ class AuthController {
                 
                 header('Location: index.php?url=home');
                 exit();
+
+
+                
             } else {
                 // Usuário existe, mas não confirmou o e-mail
                 $erro = "Sua conta ainda não foi ativada. Verifique seu e-mail.";

@@ -293,7 +293,29 @@ case 'admin/logs':
     require_once __DIR__ . '/../app/Views/admin_logs.php';
     break;
 
+    case 'lista/gerenciar':
+    $controller = new \App\Controllers\ListaController();
+    $controller->gerenciar();
+    break;
+
+case 'lista/criar':
+    $controller = new \App\Controllers\ListaController();
+    $controller->criar();
+    break;
+
+case 'lista/ver':
+    $controller = new \App\Controllers\ListaController();
+    $controller->ver();
+    break;
+
+case 'lista/adicionar-midia':
+    $controller = new \App\Controllers\ListaController();
+    $controller->adicionarMidia();
+    break;
+
 }
+//experimento
+
 ?>
 </body>
 </html>
