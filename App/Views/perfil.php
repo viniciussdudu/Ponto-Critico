@@ -70,5 +70,13 @@
     </main>
 </div>
 
+
+<div class="profile-actions">
+    <!-- Botão principal que leva para o gerenciador de listas -->
+    <a href="index.php?url=lista/gerenciar" class="btn-primary-clean">
+    📂 Visualizar Minhas Listas
+</a>
+</div>
+
 </body>
 </html>
