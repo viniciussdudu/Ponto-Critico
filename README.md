@@ -32,6 +32,12 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
 
 [sprint 4](docs/Sprints/Sprint%204_%20%20APIs,%20Mídias,%20Interação%20e%20Auditoria%20.pdf) : [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/V4.0)
 
+[sprint 5](docs/Sprints/Sprint%205_%20Listas,%20pesquisa%20e%20visualização%20de%20mídias%20.pdf) : [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/V5.0)
+
+## Planejamento do Projeto 
+
+[GitHub Projects](https://github.com/users/viniciussdudu/projects/1)
+
 ## user Stories
 
 [User Stories](docs/User%20Stories)
