@@ -119,30 +119,61 @@ switch ($url) {
 </head>
 <body>
 <header class="barra-superior">
-    <div class="barra-conteudo">
-        <a href="index.php?url=home" class="mini-brand">
-            <img src="img/nome.pontocritico.png" alt="Ponto Crítico">
-            <span>Ponto Crítico</span>
-        </a>
+<div class="barra-conteudo" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+<a href="index.php?url=home" class="mini-brand">
+<img src="img/nome.pontocritico.png" alt="Ponto Crítico">
+<span>Ponto Crítico</span>
+</a>
 
-        <nav class="menu-topo">
-            <a href="index.php?url=home">Home</a>
+<div class="busca-menu-superior" style="display: flex; gap: 12px; max-width: 450px; flex: 1; margin: 0 20px;">
 
-            <?php if (isset($_SESSION['usuario_id'])): ?>
-                
-                <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
-                    <a href="index.php?url=cadastrar-midia">Cadastrar Mídia</a>
-                <?php endif; ?>
+<div style="display: flex; position: relative; flex: 2; align-items: center;">
+<input
+type="text"
+id="inputBuscaMidia"
+placeholder="Buscar por título..."
+style="width: 100%; padding: 8px 35px 8px 12px; border: 1px solid #444; background-color: #222; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 14px;"
+>
+<button
+type="button"
+id="btnBuscaMidia"
+style="position: absolute; right: 2px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #888; font-size: 14px; padding: 6px 8px;"
+title="Pesquisar por título"
+>🔍</button>
+</div>
 
-                <a href="index.php?url=perfil">Perfil</a>
-                <a href="index.php?url=auth/logout" class="menu-destaque">Sair</a>
-            <?php else: ?>
-                <a href="index.php?url=login">Login</a>
-                <a href="index.php?url=recuperar-senha">Recuperar Senha</a>
-                <a href="index.php?url=cadastro" class="menu-destaque">Cadastrar</a>
-            <?php endif; ?>
-        </nav>
-    </div>
+<div style="display: flex; position: relative; flex: 1; align-items: center;">
+<input
+type="text"
+id="inputBuscaGenero"
+placeholder="Gênero..."
+style="width: 100%; padding: 8px 35px 8px 12px; border: 1px solid #444; background-color: #222; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 14px;"
+>
+<button
+type="button"
+id="btnBuscaGenero"
+style="position: absolute; right: 2px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #888; font-size: 14px; padding: 6px 8px;"
+title="Filtrar por gênero"
+>🔍</button>
+</div>
+
+</div>
+<nav class="menu-topo">
+<a href="index.php?url=home">Home</a>
+
+<?php if (isset($_SESSION['usuario_id'])): ?>
+<?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+<a href="index.php?url=cadastrar-midia">Cadastrar Mídia</a>
+<?php endif; ?>
+<a href="index.php?url=perfil">Perfil</a>
+<a href="index.php?url=auth/logout" class="menu-destaque">Sair</a>
+<?php else: ?>
+<a href="index.php?url=login">Login</a>
+<a href="index.php?url=recuperar-senha">Recuperar Senha</a>
+<a href="index.php?url=cadastro" class="menu-destaque">Cadastrar</a>
+<?php endif; ?>
+</nav>
+</div>
 </header>
 <hr>
 
