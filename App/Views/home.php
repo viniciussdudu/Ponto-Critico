@@ -35,12 +35,18 @@
             <?php if (!empty($midias)): ?>
                 <div class="lista-cards">
                     <?php foreach ($midias as $midia): ?>
-                        <div class="item-card">
-                            <h3><?= htmlspecialchars($midia['titulo']) ?></h3>
-                            <p><strong>Tipo:</strong> <?= htmlspecialchars($midia['tipo']) ?></p>
-                            <p><strong>Gênero:</strong> <?= htmlspecialchars($midia['genero']) ?></p>
-                            <p><strong>Lançamento:</strong> <?= htmlspecialchars($midia['data_lancamento'] ?? 'Não informado') ?></p>
+                        <a href="index.php?url=midia/detalhes&id=<?= urlencode($midia['id']) ?>" style="text-decoration: none; color: inherit;">
+                            <div class="item-card" style="cursor: pointer; transition: transform 0.2s;">
+                                <h3><?= htmlspecialchars($midia['titulo']) ?></h3>
+                                <p><strong>Tipo:</strong> <?= htmlspecialchars($midia['tipo']) ?></p>
+                                <p><strong>Gênero:</strong> <?= htmlspecialchars($midia['genero']) ?></p>
+                                <p><strong>Lançamento:</strong> <?= htmlspecialchars($midia['data_lancamento'] ?? 'Não informado') ?></p>
 
+                                <?php if (!empty($midia['sinopse'])): ?>
+                                    <p><strong>Sinopse:</strong> <?= htmlspecialchars($midia['sinopse']) ?></p>
+                                <?php endif; ?>
+                            </div>
+                        </a>
                             <?php if (!empty($midia['sinopse'])): ?>
                                 <p><strong>Sinopse:</strong> <?= htmlspecialchars($midia['sinopse']) ?></p>
                             <?php endif; ?>

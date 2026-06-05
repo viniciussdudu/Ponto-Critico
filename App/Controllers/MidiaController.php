@@ -90,6 +90,37 @@ class MidiaController {
     public function obterMidias() {
         return $this->model->obterMidias();
     }
+
+    public function visualizarDetalhes() {
+        $midiaId = $_GET['id'] ?? null;
+
+        if (!$midiaId) {
+            header('Location: index.php?url=home');
+            exit;
+        }
+
+        // Buscar mídia específica
+        $midias = $this->model->obterMidias();
+        $midia = null;
+        foreach ($midias as $m) {
+            if ($m['id'] === $midiaId) {
+                $midia = $m;
+                break;
+            }
+        }
+
+        if (!$midia) {
+            header('Location: index.php?url=home&erro=midia_nao_encontrada');
+            exit;
+        }
+
+        // Buscar avaliações da mídia
+        $avaliacaoModel = new \App\Models\AvaliacaoModel();
+        $avaliacoes = $avaliacaoModel->obterAvaliacoesDaMidia($midiaId);
+        $notaMedia = $avaliacaoModel->calcularNotaMedia($midiaId);
+
+        require_once __DIR__ . '/../Views/detalhes_midia.php';
+    }
     public function apiListarOuFiltrar() {
         // Captura o termo de busca enviado na URL (ex: ?titulo=Vingadores)
         $titulo = $_GET['titulo'] ?? '';

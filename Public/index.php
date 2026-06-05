@@ -247,6 +247,9 @@ case 'avaliacao/ver':
     $controller->ver();
     break;
 
+case 'midia/detalhes':
+    $controller = new \App\Controllers\MidiaController();
+    $controller->visualizarDetalhes();
 case 'api/avaliacoes/listar':
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->listarPorMidia();
