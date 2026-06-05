@@ -94,6 +94,16 @@ switch ($url) {
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->comentar();
     break;
+
+    case 'api/midias/listar':
+        $controller = new \App\Controllers\MidiaController();
+        $controller->apiListarOuFiltrar();
+        break;
+
+    case 'api/midias/excluir-rapida':
+    $controller = new \App\Controllers\MidiaController();
+    $controller->apiExcluirRapida();
+    break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
@@ -240,6 +250,24 @@ case 'avaliacao/ver':
 case 'midia/detalhes':
     $controller = new \App\Controllers\MidiaController();
     $controller->visualizarDetalhes();
+case 'api/avaliacoes/listar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->listarPorMidia();
+    break;
+
+case 'api/avaliacoes/enviar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->apiSalvar();
+    break;
+
+case 'api/comentarios/listar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->listarComentarios();
+    break;
+
+case 'api/comentarios/enviar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->apiComentar();
     break;
 
 case 'api/admin/logs':
@@ -268,7 +296,29 @@ case 'admin/logs':
     require_once __DIR__ . '/../app/Views/admin_logs.php';
     break;
 
+    case 'lista/gerenciar':
+    $controller = new \App\Controllers\ListaController();
+    $controller->gerenciar();
+    break;
+
+case 'lista/criar':
+    $controller = new \App\Controllers\ListaController();
+    $controller->criar();
+    break;
+
+case 'lista/ver':
+    $controller = new \App\Controllers\ListaController();
+    $controller->ver();
+    break;
+
+case 'lista/adicionar-midia':
+    $controller = new \App\Controllers\ListaController();
+    $controller->adicionarMidia();
+    break;
+
 }
+//experimento
+
 ?>
 </body>
 </html>

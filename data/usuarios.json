@@ -72,7 +72,6 @@
         "senha": "$2y$12$SbZ58AFQFJW9L9hlc01n3OyYrdIwSyYwXwPmneDNxGKOxtQQY4pZq",
         "status": 1,
         "token": null,
-        "id": "user_6a03cbe806509",
-        "recuperar_token": "fa0e4394b6baf3461df6a1f41ba419a2"
+        "id": "user_6a03cbe806509"
     }
 ]

@@ -38,7 +38,7 @@ class AvaliacaoModel {
             $id_midia = $av['midia_id'] ?? '';
             
             // Adiciona as informações legíveis ao array
-            $av['nome_usuario'] = $mapaUsuarios[$id_usuario] ?? 'Usuário Anônimo';
+            $av['usuario_nome'] = $mapaUsuarios[$id_usuario] ?? 'Usuário Anônimo';
             $av['titulo_midia'] = $mapaMidias[$id_midia] ?? 'Mídia não encontrada';
         }
 
