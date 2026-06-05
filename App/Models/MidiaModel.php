@@ -17,27 +17,31 @@ class MidiaModel {
         $novoJson = json_encode($dadosNovos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         return file_put_contents($this->caminhoArquivo, $novoJson);
     }
-    public function buscarPorTitulo($titulo = '') {
+    public function buscarPorFiltros($titulo = '', $genero = '') {
         $midias = $this->obterMidias();
 
         if (!is_array($midias)) {
             return [];
         }
 
-        // Se nenhum título for enviado, retorna todas as mídias
-        if (empty(trim($titulo))) {
-            return $midias;
-        }
-
         $tituloFiltrado = mb_strtolower(trim($titulo), 'UTF-8');
+        $generoFiltrado = mb_strtolower(trim($genero), 'UTF-8');
 
-        // Filtra o array buscando ocorrências do termo no título da mídia
-        $resultados = array_filter($midias, function($midia) use ($tituloFiltrado) {
+        // Filtra o array buscando ocorrências de ambos os termos
+        $resultados = array_filter($midias, function($midia) use ($tituloFiltrado, $generoFiltrado) {
             $tituloMidia = mb_strtolower($midia['titulo'] ?? '', 'UTF-8');
-            return mb_strpos($tituloMidia, $tituloFiltrado) !== false;
+            $generoMidia = mb_strtolower($midia['genero'] ?? '', 'UTF-8');
+
+            // Verifica se o título bate (se foi informado)
+            $bateTitulo = empty($tituloFiltrado) || (mb_strpos($tituloMidia, $tituloFiltrado) !== false);
+
+            // Verifica se o gênero bate (se foi informado)
+            $bateGenero = empty($generoFiltrado) || (mb_strpos($generoMidia, $generoFiltrado) !== false);
+
+            // A mídia precisa atender a ambos os filtros ativos
+            return $bateTitulo && $bateGenero;
         });
 
-        // array_values garante que os índices numéricos do JSON fiquem sequenciais ([0, 1, 2...])
         return array_values($resultados);
     }
 

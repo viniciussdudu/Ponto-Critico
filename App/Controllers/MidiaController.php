@@ -91,21 +91,18 @@ class MidiaController {
         return $this->model->obterMidias();
     }
     public function apiListarOuFiltrar() {
-        // Captura o termo de busca enviado na URL (ex: ?titulo=Vingadores)
+        // Captura os termos de busca enviados na URL (ex: ?titulo=Vingadores&genero=Ação)
         $titulo = $_GET['titulo'] ?? '';
+        $genero = $_GET['genero'] ?? '';
 
-        // Obtém os dados filtrados ou completos do Model
-        $resultados = $this->model->buscarPorTitulo($titulo);
+        // Obtém os dados filtrados usando o novo método do Model
+        $resultados = $this->model->buscarPorFiltros($titulo, $genero);
 
-        // Limpa qualquer saída residual antes de enviar o JSON
         if (ob_get_length()) {
             ob_clean();
         }
 
-        // Configura o cabeçalho para resposta JSON
         header('Content-Type: application/json; charset=utf-8');
-
-        // Emite os dados e encerra o script imediatamente
         echo json_encode($resultados, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         exit;
     }
