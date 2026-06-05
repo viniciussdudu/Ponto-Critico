@@ -73,6 +73,40 @@ class AvaliacaoModel {
     }
 
     /**
+     * Retorna todas as avaliações de uma mídia específica, ordenadas por nota descendente.
+     */
+    public function obterAvaliacoesDaMidia($midiaId) {
+        $avaliacoes = $this->obterAvaliacoesCompletas();
+        if (empty($avaliacoes)) {
+            return [];
+        }
+
+        $avaliacoesMidia = array_filter($avaliacoes, function ($avaliacao) use ($midiaId) {
+            return ($avaliacao['midia_id'] ?? null) == $midiaId;
+        });
+
+        usort($avaliacoesMidia, function ($a, $b) {
+            return ((int) ($b['nota'] ?? 0)) <=> ((int) ($a['nota'] ?? 0));
+        });
+
+        return array_values($avaliacoesMidia);
+    }
+
+    /**
+     * Calcula a nota média de uma mídia.
+     */
+    public function calcularNotaMedia($midiaId) {
+        $avaliacoes = $this->obterAvaliacoesDaMidia($midiaId);
+        
+        if (empty($avaliacoes)) {
+            return 0;
+        }
+
+        $somaNotas = array_sum(array_column($avaliacoes, 'nota'));
+        return round($somaNotas / count($avaliacoes), 2);
+    }
+
+    /**
      * LÓGICA DE ESCRITA: Salva a nova avaliação no arquivo JSON
      */
     public function salvar(array $novaAvaliacao): bool {
