@@ -94,6 +94,26 @@ switch ($url) {
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->comentar();
     break;
+
+    case 'api/midias/listar':
+        $controller = new \App\Controllers\MidiaController();
+        $controller->apiListarOuFiltrar();
+        break;
+
+    case 'api/midias/excluir-rapida':
+    $controller = new \App\Controllers\MidiaController();
+    $controller->apiExcluirRapida();
+    break;
+
+    case 'apiExcluirRapida':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->apiExcluirRapida();
+        break;
+
+    case 'lista/excluir':
+    $controller = new \App\Controllers\ListaController();
+    $controller->excluirLista();
+    break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
@@ -109,26 +129,61 @@ switch ($url) {
 </head>
 <body>
 <header class="barra-superior">
-    <div class="barra-conteudo">
-        <a href="index.php?url=home" class="mini-brand">
-            <img src="img/nome.pontocritico.png" alt="Ponto Crítico">
-            <span>Ponto Crítico</span>
-        </a>
+<div class="barra-conteudo" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+<a href="index.php?url=home" class="mini-brand">
+<img src="img/nome.pontocritico.png" alt="Ponto Crítico">
+<span>Ponto Crítico</span>
+</a>
 
-        <nav class="menu-topo">
-            <a href="index.php?url=home">Home</a>
+<div class="busca-menu-superior" style="display: flex; gap: 12px; max-width: 450px; flex: 1; margin: 0 20px;">
 
-            <?php if (isset($_SESSION['usuario_id'])): ?>
-                <a href="index.php?url=cadastrar-midia">Cadastrar Mídia</a>
-                <a href="index.php?url=perfil">Perfil</a>
-                <a href="index.php?url=auth/logout" class="menu-destaque">Sair</a>
-            <?php else: ?>
-                <a href="index.php?url=login">Login</a>
-                <a href="index.php?url=recuperar-senha">Recuperar Senha</a>
-                <a href="index.php?url=cadastro" class="menu-destaque">Cadastrar</a>
-            <?php endif; ?>
-        </nav>
-    </div>
+<div style="display: flex; position: relative; flex: 2; align-items: center;">
+<input
+type="text"
+id="inputBuscaMidia"
+placeholder="Buscar por título..."
+style="width: 100%; padding: 8px 35px 8px 12px; border: 1px solid #444; background-color: #222; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 14px;"
+>
+<button
+type="button"
+id="btnBuscaMidia"
+style="position: absolute; right: 2px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #888; font-size: 14px; padding: 6px 8px;"
+title="Pesquisar por título"
+>🔍</button>
+</div>
+
+<div style="display: flex; position: relative; flex: 1; align-items: center;">
+<input
+type="text"
+id="inputBuscaGenero"
+placeholder="Gênero..."
+style="width: 100%; padding: 8px 35px 8px 12px; border: 1px solid #444; background-color: #222; color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 14px;"
+>
+<button
+type="button"
+id="btnBuscaGenero"
+style="position: absolute; right: 2px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #888; font-size: 14px; padding: 6px 8px;"
+title="Filtrar por gênero"
+>🔍</button>
+</div>
+
+</div>
+<nav class="menu-topo">
+<a href="index.php?url=home">Home</a>
+
+<?php if (isset($_SESSION['usuario_id'])): ?>
+<?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+<a href="index.php?url=cadastrar-midia">Cadastrar Mídia</a>
+<?php endif; ?>
+<a href="index.php?url=perfil">Perfil</a>
+<a href="index.php?url=auth/logout" class="menu-destaque">Sair</a>
+<?php else: ?>
+<a href="index.php?url=login">Login</a>
+<a href="index.php?url=recuperar-senha">Recuperar Senha</a>
+<a href="index.php?url=cadastro" class="menu-destaque">Cadastrar</a>
+<?php endif; ?>
+</nav>
+</div>
 </header>
 <hr>
 
@@ -232,7 +287,84 @@ case 'avaliacao/ver':
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->ver();
     break;
+
+case 'midia/detalhes':
+    $controller = new \App\Controllers\MidiaController();
+    $controller->visualizarDetalhes();
+    break;
+
+case 'api/avaliacoes/listar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->listarPorMidia();
+    break;
+
+case 'api/avaliacoes/enviar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->apiSalvar();
+    break;
+
+case 'api/comentarios/listar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->listarComentarios();
+    break;
+
+case 'api/comentarios/enviar':
+    $controller = new \App\Controllers\AvaliacaoController();
+    $controller->apiComentar();
+    break;
+
+case 'api/admin/logs':
+    // Instancia o controller onde você colocou o método
+    $controller = new \App\Controllers\ApiController(); 
+    $controller->listarLogs();
+    break;
+
+case 'admin/logs':
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+
+    if (!isset($_SESSION['usuario_tipo']) || $_SESSION['usuario_tipo'] !== 'admin') {
+        header('Location: index.php?url=home&erro=acesso_negado');
+        exit;
+    }
+
+    $caminhoLogs = __DIR__ . '/../data/logs_acesso.json';
+    $logs = [];
+    if (file_exists($caminhoLogs)) {
+        $logs = json_decode(file_get_contents($caminhoLogs), true) ?? [];
+    }
+
+    require_once __DIR__ . '/../app/Views/admin_logs.php';
+    break;
+
+    case 'lista/gerenciar':
+    $controller = new \App\Controllers\ListaController();
+    $controller->gerenciar();
+    break;
+
+case 'lista/criar':
+    $controller = new \App\Controllers\ListaController();
+    $controller->criar();
+    break;
+
+case 'lista/ver':
+    $controller = new \App\Controllers\ListaController();
+    $controller->ver();
+    break;
+
+case 'lista/adicionar-midia':
+    $controller = new \App\Controllers\ListaController();
+    $controller->adicionarMidia();
+    break;
+
+
+    
+
 }
+//experimento
+
 ?>
 </body>
 </html>
