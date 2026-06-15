@@ -127,4 +127,35 @@ class UsuarioController {
         echo json_encode($logs);
         exit;
     }
+
+    public function listarLogs() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    header('Content-Type: application/json');
+
+    // 3. TRAVA DE SEGURANÇA
+    if (!isset($_SESSION['usuario_tipo']) || $_SESSION['usuario_tipo'] !== 'admin') {
+        http_response_code(403); 
+        echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'Acesso negado. Apenas administradores podem ver os logs.'
+        ]);
+        exit;
+    }
+
+    
+    $caminhoLogs = __DIR__ . '/../../data/logs_acesso.json';
+    
+    $logs = [];
+    if (file_exists($caminhoLogs)) {
+        $logs = json_decode(file_get_contents($caminhoLogs), true) ?? [];
+    }
+
+    
+    echo json_encode($logs);
+    exit;
+}
+
 }
