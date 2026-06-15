@@ -52,7 +52,11 @@
         "usuario_id": "user_69dbaee48fa3e",
         "nota": 3,
         "comentario": "bom",
-        "data": "12\/04\/2026 17:01"
+        "data": "12\/04\/2026 17:01",
+        "likes": [
+            "visitante"
+        ],
+        "deslikes": []
     },
     {
         "id": 1776013512,

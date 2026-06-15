@@ -2,108 +2,105 @@
 
 namespace App\Models;
 
+use PDO;
+
 class ListaModel {
-    private $arquivolistas = __DIR__ . '/../../data/listas.json';
-    private $arquivoVinculos = __DIR__ . '/../../data/lista_midias.json';
+    private $db;
 
-    // Função auxiliar para ler um arquivo JSON com segurança
-    private function lerJson($caminho) {
-        if (!file_exists($caminho)) {
-            return [];
-        }
-        $conteudo = file_get_contents($caminho);
-        return json_decode($conteudo, true) ?: [];
-    }
-
-    // Função auxiliar para salvar os dados de volta no arquivo JSON
-    private function salvarJson($caminho, $dados) {
-        // O argumento JSON_PRETTY_PRINT deixa o arquivo legível para você testar
-        file_put_contents($caminho, json_encode($dados, JSON_PRETTY_PRINT));
+    public function __construct() {
+        $this->db = Database::conectar();
     }
 
     // 1. Busca as listas criadas por um usuário específico
     public function buscarListasPorUsuario($usuarioId) {
-        $listas = $this->lerJson($this->arquivolistas);
-        
-        // Filtra o array mantendo apenas as listas do usuário logado
-        return array_filter($listas, function($lista) use ($usuarioId) {
-            return $lista['usuario_id'] == $usuarioId;
-        });
+        $stmt = $this->db->prepare("SELECT id_lista AS id, nome_lista AS nome, id_usuario AS usuario_id, data_criacao FROM listas WHERE id_usuario = :id_usuario ORDER BY data_criacao DESC");
+        $stmt->execute(['id_usuario' => $usuarioId]);
+        return $stmt->fetchAll();
     }
 
-    // 2. Cria uma nova lista gerando um ID incremental automático
+    // 2. Cria uma nova lista usando o SERIAL (auto_increment) do Postgres
     public function criarNovaLista($nome, $usuarioId) {
-        $listas = $this->lerJson($this->arquivolistas);
-
-        // Gera um ID incremental simples baseado no maior ID existente
-        $novoId = empty($listas) ? 1 : max(array_column($listas, 'id')) + 1;
-
-        $novaLista = [
-            'id' => $novoId,
-            'nome' => $nome,
-            'usuario_id' => $usuarioId,
-            'data_criacao' => date('Y-m-d H:i:s')
-        ];
-
-        $listas[] = $novaLista;
-        $this->salvarJson($this->arquivolistas, $listas);
-        return $novoId;
+        $sql = "INSERT INTO listas (nome_lista, id_usuario) VALUES (:nome_lista, :id_usuario) RETURNING id_lista";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'nome_lista' => $nome,
+            'id_usuario' => $usuarioId
+        ]);
+        
+        return $stmt->fetchColumn();
     }
 
     // 3. Busca os dados de uma única lista pelo ID dela
     public function buscarPorId($listaId) {
-        $listas = $this->lerJson($this->arquivolistas);
-        foreach ($listas as $lista) {
-            if ($lista['id'] == $listaId) {
-                return $lista;
-            }
-        }
-        return null;
+        $stmt = $this->db->prepare("SELECT id_lista AS id, nome_lista AS nome, id_usuario AS usuario_id, data_criacao FROM listas WHERE id_lista = :id_lista");
+        $stmt->execute(['id_lista' => $listaId]);
+        $lista = $stmt->fetch();
+
+        return $lista ?: null;
     }
 
-    // 4. Busca as mídias associadas a uma lista (Faz o papel do "JOIN")
+    // 4. Busca as mídias associadas a uma lista (Faz o papel real do "JOIN")
     public function buscarMidiasDaLista($listaId) {
-        $vinculos = $this->lerJson($this->arquivoVinculos);
-        
-        $midiaModel = new MidiaModel();
-        $todasAsMidias = $midiaModel->obterMidias(); //  MUDADO para obterMidias()
+        $sql = "SELECT m.id_midia AS id, m.titulo, m.data_lancamento, m.tipo_midia, m.genero, m.sinopse, m.capa_midia, ml.posicao
+                FROM midia m
+                INNER JOIN midias_lista ml ON m.id_midia = ml.id_midia
+                WHERE ml.id_lista = :id_lista
+                ORDER BY ml.posicao ASC";
 
-        $midiasFiltradas = [];
-
-        if (is_array($vinculos) && is_array($todasAsMidias)) {
-            foreach ($vinculos as $vinculo) {
-                if ($vinculo['lista_id'] == $listaId) {
-                    foreach ($todasAsMidias as $midia) {
-                        if ($midia['id'] == $vinculo['midia_id']) {
-                            $midiasFiltradas[] = $midia;
-                        }
-                    }
-                }
-            }
-        }
-        return $midiasFiltradas;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id_lista' => $listaId]);
+        return $stmt->fetchAll();
     }
 
     // 5. Verifica se a mídia já foi adicionada para evitar duplicados
     public function midiaJaExisteNaLista($listaId, $midiaId) {
-        $vinculos = $this->lerJson($this->arquivoVinculos);
-        foreach ($vinculos as $vinculo) {
-            if ($vinculo['lista_id'] == $listaId && $vinculo['midia_id'] == $midiaId) {
-                return true;
-            }
-        }
-        return false;
+        $stmt = $this->db->prepare("SELECT 1 FROM midias_lista WHERE id_lista = :id_lista AND id_midia = :id_midia");
+        $stmt->execute([
+            'id_lista' => $listaId,
+            'id_midia' => $midiaId
+        ]);
+        return (bool)$stmt->fetch();
     }
 
-    // 6. Vincula a mídia inserindo o registro no JSON pivô
+    // 6. Vincula a mídia inserindo o registro na tabela pivot
     public function adicionarMidiaNaLista($listaId, $midiaId) {
-        $vinculos = $this->lerJson($this->arquivoVinculos);
+        $stmtPos = $this->db->prepare("SELECT COALESCE(MAX(posicao), 0) + 1 FROM midias_lista WHERE id_lista = :id_lista");
+        $stmtPos->execute(['id_lista' => $listaId]);
+        $proximaPosicao = $stmtPos->fetchColumn();
 
-        $vinculos[] = [
-            'lista_id' => (int)$listaId,
-            'midia_id' => $midiaId
-        ];
+        $sql = "INSERT INTO midias_lista (id_lista, id_midia, posicao) VALUES (:id_lista, :id_midia, :posicao)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            'id_lista' => (int)$listaId,
+            'id_midia' => $midiaId,
+            'posicao'  => $proximaPosicao
+        ]);
+    }
 
-        $this->salvarJson($this->arquivoVinculos, $vinculos);
+    public function deletarListaPorId($listaId, $usuarioId): bool {
+        try {
+            $this->db->beginTransaction();
+
+            $stmtVinculo = $this->db->prepare("DELETE FROM midias_lista WHERE id_lista = :lista_id");
+            $stmtVinculo->execute(['lista_id' => $listaId]);
+
+            
+            $stmtLista = $this->db->prepare("DELETE FROM listas WHERE id_lista = :lista_id AND id_usuario = :usuario_id");
+            $stmtLista->execute([
+                'lista_id' => $listaId,
+                'usuario_id' => $usuarioId
+            ]);
+
+            
+            $this->db->commit();
+            return true;
+
+        } catch (\PDOException $e) {
+            
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            return false;
+        }
     }
 }

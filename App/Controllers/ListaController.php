@@ -7,91 +7,135 @@ use App\Models\MidiaModel;
 
 class ListaController {
 
-    // 1. ROTA: /lista/gerenciar
-    // Exibe a tela com o botão de criar e a lista de pastas existentes
+    public function __construct() {
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
+
+    
     public function gerenciar() {
-        // Garante que o usuário está logado pegando o ID da sessão
+        header("Location: index.php?url=perfil&tab=listas");
+        exit;
+    }
+
+    
+    public function criar() {
         if (!isset($_SESSION['usuario_id'])) {
             header("Location: index.php?url=login");
             exit;
         }
 
-        $usuarioId = $_SESSION['usuario_id'];
-        $listaModel = new ListaModel();
-
-        // Busca apenas as listas criadas por esse usuário específico
-        $listas = $listaModel->buscarListasPorUsuario($usuarioId);
-
-        // Carrega a View da Etapa 2 passando os dados
-        require_once __DIR__ . '/../Views/lista/gerenciar.php';
-    }
-
-    // 2. ROTA: /lista/criar (Método POST)
-    // Processa o formulário de criação de uma nova lista
-    public function criar() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nome'])) {
             $nomeLista = trim($_POST['nome']);
             $usuarioId = $_SESSION['usuario_id'];
 
             $listaModel = new ListaModel();
+            
             $listaModel->criarNovaLista($nomeLista, $usuarioId);
 
-            // Após criar, joga o usuário de volta para a tela de gerenciamento
-            header("Location: index.php?url=lista/gerenciar");
+            
+            header("Location: index.php?url=perfil&tab=listas");
             exit;
         }
     }
 
-    // 3. ROTA: /lista/ver?id=X
-    // Abre a lista específica, mostra as mídias dela e o campo de busca para adicionar novas
+    
     public function ver() {
+        if (!isset($_SESSION['usuario_id'])) {
+            header("Location: index.php?url=login");
+            exit;
+        }
+
         if (!isset($_GET['id'])) {
-            header("Location: index.php?url=lista/gerenciar");
+            
+            header("Location: index.php?url=perfil&tab=listas");
             exit;
         }
 
         $listaId = (int)$_GET['id'];
         $listaModel = new ListaModel();
-        $midiaModel = new MidiaModel(); // Model que gerencia seu catálogo geral
+        $midiaModel = new MidiaModel();
 
-        // Busca os dados da lista (para saber o nome dela)
+        
         $lista = $listaModel->buscarPorId($listaId);
 
-        // Segurança: Se a lista não existir ou não for do usuário logado, barra o acesso
+        
         if (!$lista || $lista['usuario_id'] != $_SESSION['usuario_id']) {
-            header("Location: /lista/gerenciar");
+            header("Location: index.php?url=perfil&tab=listas&erro=lista_privada");
             exit;
         }
 
-        // Busca as mídias que JÁ ESTÃO salvas dentro dessa lista específica
+        
         $midiasDaLista = $listaModel->buscarMidiasDaLista($listaId);
 
-        // Busca TODAS as mídias cadastradas no sistema para preencher o <select> de busca
+        
         $todasAsMidias = $midiaModel->obterMidias();
 
-        // Carrega a View da Etapa 3
-        // Antes estava: require_once "views/lista/ver.php";
-    require_once __DIR__ . '/../Views/lista/ver.php';
+        
+        require_once __DIR__ . '/../Views/lista/ver.php';
     }
 
-    // 4. ROTA: /lista/adicionar-midia (Método POST)
-    // Processa o vínculo da mídia selecionada com a lista atual
+    
     public function adicionarMidia() {
+        if (!isset($_SESSION['usuario_id'])) {
+            header("Location: index.php?url=login");
+            exit;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $listaId = (int)$_POST['lista_id'];
-            $midiaId = $_POST['midia_id'];
-
+            $midiaId = $_POST['midia_id']; 
 
             $listaModel = new ListaModel();
 
-            // Evita duplicar a mesma mídia na mesma lista
+            
             if (!$listaModel->midiaJaExisteNaLista($listaId, $midiaId)) {
+                
                 $listaModel->adicionarMidiaNaLista($listaId, $midiaId);
             }
 
-            // Redireciona de volta para a página da própria lista
+            
             header("Location: index.php?url=lista/ver&id=" . $listaId);
             exit;
         }
+    }
+
+    public function excluirLista() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location: index.php?url=login');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?url=perfil&tab=listas');
+            exit;
+        }
+
+        $listaId = $_POST['lista_id'] ?? '';
+        $usuarioId = $_SESSION['usuario_id'];
+
+        if (empty($listaId)) {
+            header('Location: index.php?url=perfil&tab=listas&erro=id_invalido');
+            exit;
+        }
+
+        
+        $listaModel = new \App\Models\ListaModel();
+        
+        
+        $deletou = $listaModel->deletarListaPorId($listaId, $usuarioId);
+
+        if ($deletou) {
+            header('Location: index.php?url=perfil&tab=listas&sucesso=lista_removida');
+        } else {
+            header('Location: index.php?url=perfil&tab=listas&erro=erro_exclusao');
+        }
+        exit;
     }
 }

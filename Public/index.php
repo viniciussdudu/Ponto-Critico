@@ -104,6 +104,16 @@ switch ($url) {
     $controller = new \App\Controllers\MidiaController();
     $controller->apiExcluirRapida();
     break;
+
+    case 'apiExcluirRapida':
+        $controller = new \App\Controllers\AvaliacaoController();
+        $controller->apiExcluirRapida();
+        break;
+
+    case 'lista/excluir':
+    $controller = new \App\Controllers\ListaController();
+    $controller->excluirLista();
+    break;
 }
 
 // 2. DEPOIS O HTML (Menu e Views)
@@ -281,6 +291,8 @@ case 'avaliacao/ver':
 case 'midia/detalhes':
     $controller = new \App\Controllers\MidiaController();
     $controller->visualizarDetalhes();
+    break;
+
 case 'api/avaliacoes/listar':
     $controller = new \App\Controllers\AvaliacaoController();
     $controller->listarPorMidia();
@@ -346,6 +358,9 @@ case 'lista/adicionar-midia':
     $controller = new \App\Controllers\ListaController();
     $controller->adicionarMidia();
     break;
+
+
+    
 
 }
 //experimento

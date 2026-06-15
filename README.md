@@ -43,13 +43,21 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
 [User Stories](docs/User%20Stories)
 
 
-## Como Executar o Projeto Localmente
+# Como Executar o Projeto Localmente
 
-1.  Certifique-se de ter o **PHP 8.x** instalado.
-2.  Clone o repositório:
-    ```bash
-    git clone [https://github.com/viniciussdudu/Ponto-Critico.git](https://github.com/viniciussdudu/Ponto-Critico.git)
-    ```
+1. **Pré-requisitos:**
+   * Certifique-se de ter o **XAMPP** instalado (com suporte ao PHP 8.x).
+   * Certifique-se de ter o **PostgreSQL** e o **pgAdmin** instalados e rodando.
+
+2. **Clone o repositório dentro do htdocs do XAMPP:**
+   Navegue até a pasta `htdocs` do seu XAMPP (geralmente em `C:\xampp\htdocs\`) e clone o projeto:
+   ```bash
+   git clone https://github.com/viniciussdudu/Ponto-Critico.git
+
+
+
+
+
 
 3. Certifique-se de ter o Composer instalado.
        No Terminal digite:
@@ -57,10 +65,16 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
     composer install
     ```
 
-4.  Inicie o servidor embutido do PHP apontando para a pasta pública:
-    ```bash
-    php -S localhost:8000 -t Public
-    ```
-5.  Abra o navegador e acesse: `http://localhost:8000`
+4. Configuração do Banco de Dados:
+   * Abra o pgAdmin e crie um novo banco de dados com o nome ponto_critico
+
+   * clone o arquivo Ponto_critico.SQL
+
+   * modifique o arquivo App/Models/Database.php com as suas configurações do PostgreSQL
+
+5. Abra o terminal do XAMPPP e clique em Start no Module Apache
+
+
+
 
    

@@ -1,9 +1,11 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 <div class="page">
     <header class="topo">
         <div>
             <h1><?php echo htmlspecialchars($midia['titulo'] ?? ''); ?></h1>
             <p class="subtitulo">
-                <?php echo htmlspecialchars($midia['tipo'] ?? ''); ?> • 
+                <?php echo htmlspecialchars($midia['tipo_midia'] ?? $midia['tipo'] ?? ''); ?> • 
                 <?php echo htmlspecialchars($midia['genero'] ?? ''); ?> • 
                 <?php echo htmlspecialchars($midia['data_lancamento'] ?? ''); ?>
             </p>
@@ -18,19 +20,37 @@
     </header>
 
     <main class="grid-home">
-        <section class="card">
+        <section class="card" style="display: flex; flex-direction: column; gap: 16px;">
             <h2>Informações</h2>
-            <p><strong>Tipo:</strong> <?php echo htmlspecialchars($midia['tipo'] ?? ''); ?></p>
-            <p><strong>Gênero:</strong> <?php echo htmlspecialchars($midia['genero'] ?? ''); ?></p>
-            <p><strong>Lançamento:</strong> <?php echo htmlspecialchars($midia['data_lancamento'] ?? ''); ?></p>
-            <h3 style="margin-top: 20px;">Sinopse</h3>
-            <p><?php echo nl2br(htmlspecialchars($midia['sinopse'] ?? '')); ?></p>
+            
+            <div class="midia-capa-detalhe" style="align-self: center; margin-bottom: 8px;">
+                <?php if (!empty($midia['capa_midia'])): ?>
+                    <img src="uploads/capas_midias/<?= htmlspecialchars($midia['capa_midia']) ?>" 
+                         alt="Capa de <?= htmlspecialchars($midia['titulo'] ?? 'Mídia') ?>" 
+                         style="width: 100%; max-width: 200px; height: 280px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;">
+                <?php else: ?>
+                    <img src="img/sem-capa.png" 
+                         alt="Sem Capa" 
+                         style="width: 100%; max-width: 200px; height: 280px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;">
+                <?php endif; ?>
+            </div>
+
+            <div class="dados-tecnicos">
+                <p><strong>Tipo:</strong> <?php echo htmlspecialchars($midia['tipo_midia'] ?? $midia['tipo'] ?? ''); ?></p>
+                <p><strong>Gênero:</strong> <?php echo htmlspecialchars($midia['genero'] ?? ''); ?></p>
+                <p><strong>Lançamento:</strong> <?php echo htmlspecialchars($midia['data_lancamento'] ?? ''); ?></p>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 5px 0;">
+
+            <h3 style="margin-top: 5px;">Sinopse</h3>
+            <p style="line-height: 1.5;"><?php echo nl2br(htmlspecialchars($midia['sinopse'] ?? '')); ?></p>
         </section>
 
         <section class="card card-largo">
             <div class="topo-secao">
                 <div>
-                    <h2>Avaliações</h2>
+                    <h2>Avaliações dos Usuários</h2>
                     <p class="subtitulo-secao">
                         Nota média: 
                         <strong style="font-size: 1.2em; color: #00c030;">
@@ -70,3 +90,4 @@
         </section>
     </main>
 </div>
+</html>

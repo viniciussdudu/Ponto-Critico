@@ -15,7 +15,8 @@
             </div>
         <?php endif; ?>
 
-        <form method="POST" action="index.php?url=midia/salvar">
+        <form method="POST" action="index.php?url=midia/salvar" enctype="multipart/form-data">
+
             <div>
                 <label for="titulo">Título:</label>
                 <input type="text" id="titulo" name="titulo" required>
@@ -55,18 +56,23 @@
                 <input type="date" id="data_lancamento" name="data_lancamento" required>
             </div>
 
+            <div class="campo-form">
+                <label for="imagem">Capa / Imagem da Mídia:</label>
+                <input type="file" id="imagem" name="imagem" accept="image/*">
+            </div>
+
             <div>
                 <label for="sinopse">Sinopse:</label>
                 <textarea id="sinopse" name="sinopse" required></textarea>
             </div>
 
-            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <div class="botoes-form" style="display:flex; gap:12px; flex-wrap:wrap; margin-top: 15px;">
                 <a href="index.php?url=home" class="btn btn-secundario btn-inline">Voltar</a>
                 <button type="submit" class="btn">Salvar Mídia</button>
             </div>
         </form>
 
-        <p class="text-center">
+        <p class="text-center" style="margin-top: 20px;">
             <a href="index.php?url=home">Voltar para a Home</a>
         </p>
     </div>
