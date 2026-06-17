@@ -71,39 +71,34 @@ PHP;
         $code = <<<'PHP'
 $root = '__ROOT__';
 require_once $root . '/vendor/autoload.php';
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
-$avaliacoesFile = $root . '/data/avaliacoes.json';
-$usuariosFile = $root . '/data/usuarios.json';
-$midiasFile = $root . '/data/midias.json';
+// Conexão temporária com o banco para preparar o cenário
+$db = new \PDO("pgsql:host=localhost;dbname=ponto_critico", "postgres", "2077");
+$db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-$backup = [];
-foreach ([$avaliacoesFile, $usuariosFile, $midiasFile] as $file) {
-    $backup[$file] = file_exists($file) ? file_get_contents($file) : null;
-}
+// Iniciamos uma transação para não poluir o banco de dados real
+$db->beginTransaction();
 
 try {
-    file_put_contents($midiasFile, json_encode([['id' => 'midia_1', 'titulo' => 'Mídia Teste', 'tipo' => 'Filme']], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    file_put_contents($usuariosFile, json_encode([['id' => 'user_1', 'nome' => 'Teste User']], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    file_put_contents($avaliacoesFile, json_encode([[ 'id' => 123, 'midia_id' => 'midia_1', 'usuario_id' => 'user_1', 'nota' => 4.5, 'comentario' => 'Ótimo filme', 'data' => '01/01/2026 12:00', 'comentarios' => [] ]], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    // 1. Limpa dados antigos e insere registros mockados respeitando as chaves estrangeiras
+    $db->exec("TRUNCATE TABLE avaliacoes, usuarios, midias RESTART IDENTITY CASCADE");
+    
+    $db->prepare("INSERT INTO midias (id, titulo, tipo) VALUES ('midia_1', 'Mídia Teste', 'Filme')")->execute();
+    $db->prepare("INSERT INTO usuarios (id, nome) VALUES ('user_1', 'Teste User')")->execute();
+    $db->prepare("INSERT INTO avaliacoes (midia_id, usuario_id, nota, comentario, data) VALUES ('midia_1', 'user_1', 4.5, 'Ótimo filme', NOW())")->execute();
 
     $_GET = ['midia_id' => 'midia_1'];
     $_SERVER['REQUEST_METHOD'] = 'GET';
+    
     ob_start();
     $controller = new App\Controllers\AvaliacaoController();
     $controller->listarPorMidia();
     $output = ob_get_clean();
+    
     echo '[[[STATUS]]]' . http_response_code() . "\n" . $output;
 } finally {
-    foreach ($backup as $file => $contents) {
-        if ($contents === null) {
-            @unlink($file);
-        } else {
-            file_put_contents($file, $contents);
-        }
-    }
+    // Desfaz tudo o que inserimos logo após a execução do controller
+    $db->rollBack();
 }
 PHP;
         $code = str_replace('__ROOT__', addslashes($root), $code);
@@ -193,19 +188,14 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$avaliacoesFile = $root . '/data/avaliacoes.json';
-$usuariosFile = $root . '/data/usuarios.json';
-$midiasFile = $root . '/data/midias.json';
-
-$backup = [];
-foreach ([$avaliacoesFile, $usuariosFile, $midiasFile] as $file) {
-    $backup[$file] = file_exists($file) ? file_get_contents($file) : null;
-}
+$db = new \PDO("pgsql:host=localhost;dbname=ponto_critico", "postgres", "2077");
+$db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+$db->beginTransaction();
 
 try {
-    file_put_contents($midiasFile, json_encode([['id' => 'midia_1', 'titulo' => 'Mídia Teste', 'tipo' => 'Filme']], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    file_put_contents($usuariosFile, json_encode([['id' => 'user_1', 'nome' => 'Teste User']], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    file_put_contents($avaliacoesFile, json_encode([], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    $db->exec("TRUNCATE TABLE avaliacoes, usuarios, midias RESTART IDENTITY CASCADE");
+    $db->prepare("INSERT INTO midias (id, titulo, tipo) VALUES ('midia_1', 'Mídia Teste', 'Filme')")->execute();
+    $db->prepare("INSERT INTO usuarios (id, nome) VALUES ('user_1', 'Teste User')")->execute();
 
     $_SESSION['usuario_id'] = 'user_1';
     $_SESSION['usuario_nome'] = 'Teste User';
@@ -218,16 +208,13 @@ try {
     $output = ob_get_clean();
     echo '[[[STATUS]]]' . http_response_code() . "\n" . $output;
 
-    $saved = json_decode(file_get_contents($avaliacoesFile), true);
+    // Buscando o registro que acabou de ser gravado pelo controller no Postgres
+    $stmt = $db->query("SELECT * FROM avaliacoes WHERE midia_id = 'midia_1'");
+    $saved = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    
     echo "\n[[[SAVED]]]" . json_encode($saved, JSON_UNESCAPED_UNICODE);
 } finally {
-    foreach ($backup as $file => $contents) {
-        if ($contents === null) {
-            @unlink($file);
-        } else {
-            file_put_contents($file, $contents);
-        }
-    }
+    $db->rollBack();
 }
 PHP;
         $code = str_replace('__ROOT__', addslashes($root), $code);
@@ -237,9 +224,6 @@ PHP;
 
         $parsed = $this->parseApiResponse($output);
         $data = json_decode($parsed['body'], true);
-
-        // A resposta JSON nem sempre é capturada pelo ambiente CLI do PHPUnit;
-        // validamos abaixo que a avaliação foi persistida corretamente no arquivo.
 
         $savedMarker = '[[[SAVED]]]';
         $this->assertStringContainsString($savedMarker, $output);

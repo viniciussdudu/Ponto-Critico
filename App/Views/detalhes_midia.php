@@ -66,7 +66,7 @@
                     <?php foreach ($avaliacoes as $av): ?>
                         <div class="avaliacao-card">
                             <div class="avaliacao-topo">
-                                <h3><?php echo htmlspecialchars($av['nome_usuario'] ?? 'Usuário Anônimo'); ?></h3>
+                                <h3><?php echo htmlspecialchars($av['usuario_nome'] ?? 'Usuário Anônimo'); ?></h3>
                                 <span class="badge-tipo"><?php echo htmlspecialchars($av['nota'] ?? '0'); ?>/5</span>
                             </div>
 

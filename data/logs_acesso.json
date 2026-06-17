@@ -1,6 +1,54 @@
 [
     {
         "usuario_email": "viniteste2@gmail.com",
+        "data_hora": "2026-06-16 16:25:35",
+        "ip": "127.0.0.1",
+        "evento": "Login realizado com sucesso"
+    },
+    {
+        "usuario_email": "YoshikageKira@gmail.com",
+        "data_hora": "2026-06-16 16:09:29",
+        "ip": "127.0.0.1",
+        "evento": "Login realizado com sucesso"
+    },
+    {
+        "usuario_email": "viniteste2@gmail.com",
+        "data_hora": "2026-06-16 15:47:00",
+        "ip": "127.0.0.1",
+        "evento": "Login realizado com sucesso"
+    },
+    {
+        "usuario_email": "viniteste2@gmail.com",
+        "data_hora": "2026-06-16 15:32:09",
+        "ip": "127.0.0.1",
+        "evento": "Login realizado com sucesso"
+    },
+    {
+        "usuario_email": "pedrogames@gmail.com",
+        "data_hora": "2026-06-16 15:31:07",
+        "ip": "127.0.0.1",
+        "evento": "Login realizado com sucesso"
+    },
+    {
+        "usuario_email": "pedrogames@gmail.com",
+        "data_hora": "2026-06-16 15:29:17",
+        "ip": "127.0.0.1",
+        "evento": "Login realizado com sucesso"
+    },
+    {
+        "usuario_email": "mario@gmail.com",
+        "data_hora": "2026-06-16 15:22:07",
+        "ip": "127.0.0.1",
+        "evento": "Login realizado com sucesso"
+    },
+    {
+        "usuario_email": "viniteste2@gmail.com",
+        "data_hora": "2026-06-16 15:20:00",
+        "ip": "127.0.0.1",
+        "evento": "Login realizado com sucesso"
+    },
+    {
+        "usuario_email": "viniteste2@gmail.com",
         "data_hora": "2026-06-14 22:58:27",
         "ip": "127.0.0.1",
         "evento": "Login realizado com sucesso"
