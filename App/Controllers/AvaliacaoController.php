@@ -2,98 +2,108 @@
 
 namespace App\Controllers;
 
-// Importa os Models usados por este Controller
 use App\Models\AvaliacaoModel;
 use App\Models\MidiaModel;
 
 class AvaliacaoController
 {
+    public function __construct()
+    {
+        // Garante que a sessão está sempre ativa para capturar os IDs de usuário de forma segura
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
+
     // ===================== Exibir formulário de nova avaliação
     public function criar(): void
     {
-        // Instancia o Model de Mídias
         $midiaModel = new MidiaModel();
 
-        // Busca todas as mídias cadastradas para preencher o select da view
+        // Busca todas as mídias cadastradas no Postgres
         $midias = $midiaModel->obterMidias();
 
-        // Carrega a tela de cadastro de avaliação
         require_once __DIR__ . '/../Views/avaliacao.php';
     }
 
     // ===================== Salvar nova avaliação
     public function salvar(): void
     {
-        // Garante que a rota só aceite envio via POST
+        // 1. Garante que a sessão está ativa ANTES de qualquer verificação
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php?url=home');
             exit;
         }
 
-        // Captura os dados enviados pelo formulário
-        // midia_id é string porque o ID da mídia pode ser algo como "mid_abc123"
-        $midiaId = $_POST['midia_id'] ?? '';
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location: index.php?url=login&erro=necessario_login');
+            exit;
+        }
 
-        // Usa float para aceitar meia estrela, exemplo: 0.5, 1.5, 4.5
-        $nota = isset($_POST['nota']) ? (float) $_POST['nota'] : 0;
-
-        // Remove espaços extras do comentário
+        
+        $midiaId    = $_POST['midia_id'] ?? '';
+        $nota       = isset($_POST['nota']) ? (float) $_POST['nota'] : 0;
         $comentario = trim($_POST['comentario'] ?? '');
 
-        // Valida os campos obrigatórios
-        // A nota precisa estar entre 0.5 e 5
+        // Validação de campos obrigatórios
         if (empty($midiaId) || $nota < 0.5 || $nota > 5 || empty($comentario)) {
             header('Location: index.php?url=avaliacao/criar&erro=campos_invalidos');
             exit;
         }
 
-        // Instancia o Model de Avaliações
         $avaliacaoModel = new AvaliacaoModel();
 
-        // Monta o array com os dados da nova avaliação
+        
         $novaAvaliacao = [
-            'id' => time(), // Gera um ID simples usando timestamp
-            'midia_id' => $midiaId,
-            'usuario_id' => $_SESSION['usuario_id'] ?? 0, // Usa usuário logado, se existir
-            'nota' => $nota,
-            'comentario' => $comentario,
-            'data' => date('d/m/Y H:i')
+            'midia_id'   => $midiaId,
+            'usuario_id' => $_SESSION['usuario_id'],
+            'nota'       => $nota,
+            'comentario' => $comentario
         ];
 
-        // Salva a avaliação no JSON
-        if ($avaliacaoModel->salvar($novaAvaliacao)) {
-            header('Location: index.php?url=home&sucesso=avaliacao');
-            exit;
+        try {
+            // Executa a inserção
+            if ($avaliacaoModel->salvar($novaAvaliacao)) {
+                header('Location: index.php?url=home&sucesso=avaliacao');
+                exit;
+            }
+        } catch (\PDOException $e) {
+        
+            if ($e->getCode() === '23505' || strpos($e->getMessage(), 'unica_avaliacao_por_usuario') !== false) { 
+                header('Location: index.php?url=home&erro=ja_avaliado');
+                exit;
+            }
+            
+    
         }
 
-        // Caso ocorra erro ao salvar
-        echo "Erro crítico ao salvar no JSON.";
+        
+        header('Location: index.php?url=home&erro=critico_banco');
         exit;
     }
 
     // ===================== Exibir formulário de edição de avaliação
     public function editar(): void
     {
-        // Captura o ID da avaliação pela URL
         $id = $_GET['id'] ?? null;
 
-        // Se não houver ID, volta para a home
         if (!$id) {
             header('Location: index.php?url=home');
             exit;
         }
 
-        // Busca a avaliação pelo ID
         $model = new AvaliacaoModel();
         $avaliacao = $model->obterPorId($id);
 
-        // Se encontrar a avaliação, carrega a tela de edição
         if ($avaliacao) {
             require_once __DIR__ . '/../Views/editar_avaliacao.php';
             return;
         }
 
-        // Se não encontrar, volta para a home
         header('Location: index.php?url=home');
         exit;
     }
@@ -101,108 +111,118 @@ class AvaliacaoController
     // ===================== Atualizar avaliação existente
     public function atualizar(): void
     {
-        // Garante que a atualização só ocorra via POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php?url=home');
             exit;
         }
 
-        // Captura os dados enviados pelo formulário de edição
         $id = $_POST['id'] ?? null;
-
-        // Usa float para permitir notas com meia estrela
         $nota = isset($_POST['nota']) ? (float) $_POST['nota'] : 0;
-
-        // Limpa espaços extras do comentário
         $comentario = trim($_POST['comentario'] ?? '');
 
-        // Valida se os dados estão corretos
         if (!$id || $nota < 0.5 || $nota > 5 || empty($comentario)) {
             header('Location: index.php?url=home&erro=avaliacao_invalida');
             exit;
         }
 
-        // Instancia o Model e atualiza a avaliação no JSON
         $model = new AvaliacaoModel();
         $model->atualizar($id, $nota, $comentario);
 
-        // Redireciona para a home após atualizar
         header('Location: index.php?url=home&sucesso=avaliacao_atualizada');
         exit;
     }
 
     // ===================== Ver avaliação (detalhes)
-public function ver(): void
-{
-    $id = $_GET['id'] ?? null;
+    public function ver(): void
+    {
+        $id = $_GET['id'] ?? null;
 
-    if (!$id) {
-        header('Location: index.php?url=home');
+        if (!$id) {
+            header('Location: index.php?url=home');
+            exit;
+        }
+
+        $model = new AvaliacaoModel();
+        $avaliacao = $model->obterPorId($id);
+
+        if (!$avaliacao) {
+            header('Location: index.php?url=home');
+            exit;
+        }
+
+        require_once __DIR__ . '/../Views/ver_avaliacao.php';
+    }
+
+    // ===================== Interações de Like/Dislike vinculadas ao ID da Mídia
+    public function like(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $avaliacaoId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $usuarioId = $_SESSION['usuario_id'] ?? null;
+
+        if (!$usuarioId) {
+            header('Location: index.php?url=login');
+            exit;
+        }
+
+        if ($avaliacaoId > 0) {
+            $model = new \App\Models\AvaliacaoModel();
+            $model->adicionarLikeAvaliacao($avaliacaoId, $usuarioId);
+        }
+
+    
+        header('Location: index.php?url=avaliacao/ver&id=' . urlencode($avaliacaoId));
         exit;
     }
 
-    $model = new AvaliacaoModel();
-    $avaliacao = $model->obterPorId($id);
+    public function deslike(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-    if (!$avaliacao) {
-        header('Location: index.php?url=home');
+        $avaliacaoId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $usuarioId = $_SESSION['usuario_id'] ?? null;
+
+        if (!$usuarioId) {
+            header('Location: index.php?url=login');
+            exit;
+        }
+
+        if ($avaliacaoId > 0) {
+            $model = new \App\Models\AvaliacaoModel();
+            $model->adicionarDeslikeAvaliacao($avaliacaoId, $usuarioId);
+        }
+
+        header('Location: index.php?url=avaliacao/ver&id=' . urlencode($avaliacaoId));
         exit;
     }
 
-    require_once __DIR__ . '/../Views/ver_avaliacao.php';
-}
+    // ===================== Comentar em uma avaliação (Sincrono)
+    public function comentar(): void
+    {
+        $id = $_POST['avaliacao_id'] ?? null;
+        $texto = trim($_POST['comentario'] ?? '');
 
-public function like(): void
-{
-    $id = $_GET['id'] ?? null;
-    $usuarioId = $_SESSION['usuario_id'] ?? 'visitante';
+        if ($id && !empty($texto) && isset($_SESSION['usuario_id'])) {
+            $model = new AvaliacaoModel();
 
-    if ($id) {
-        $model = new AvaliacaoModel();
-        $model->adicionarLike($id, $usuarioId);
+            $comentario = [
+                'usuario_id' => $_SESSION['usuario_id'],
+                'conteudo'   => $texto
+            ];
+
+            $model->adicionarComentario($id, $comentario);
+        }
+
+        header('Location: index.php?url=avaliacao/ver&id=' . urlencode($id));
+        exit;
     }
 
-    header('Location: index.php?url=avaliacao/ver&id=' . urlencode($id));
-    exit;
-}
-
-public function deslike(): void
-{
-    $id = $_GET['id'] ?? null;
-    $usuarioId = $_SESSION['usuario_id'] ?? 'visitante';
-
-    if ($id) {
-        $model = new AvaliacaoModel();
-        $model->adicionarDeslike($id, $usuarioId);
-    }
-
-    header('Location: index.php?url=avaliacao/ver&id=' . urlencode($id));
-    exit;
-}
-
-// ===================== Comentar em uma avaliação
-public function comentar(): void
-{
-    $id = $_POST['avaliacao_id'] ?? null;
-    $texto = trim($_POST['comentario'] ?? '');
-
-    if ($id && !empty($texto)) {
-        $model = new AvaliacaoModel();
-
-        $comentario = [
-            'usuario_id' => $_SESSION['usuario_id'] ?? 0,
-            'usuario_nome' => $_SESSION['usuario_nome'] ?? 'Usuário',
-            'texto' => $texto,
-            'data' => date('d/m/Y H:i')
-        ];
-
-        $model->adicionarComentario($id, $comentario);
-    }
-
-    header('Location: index.php?url=avaliacao/ver&id=' . urlencode($id));
-    exit;
-}
-
+    // ===================== API: Listar Avaliações por Mídia
     public function listarPorMidia(): void
     {
         header('Content-Type: application/json; charset=UTF-8');
@@ -218,124 +238,127 @@ public function comentar(): void
         }
 
         $model = new AvaliacaoModel();
-        $avaliacoes = $model->obterAvaliacoesCompletas();
-        $resultado = array_values(array_filter($avaliacoes, function ($avaliacao) use ($midiaId) {
-            return isset($avaliacao['midia_id']) && $avaliacao['midia_id'] === $midiaId;
-        }));
+        $resultado = $model->obterAvaliacoesDaMidia($midiaId);
+
+        // === AJUSTE DE COMPATIBILIDADE PARA O JAVASCRIPT ===
+        if (is_array($resultado)) {
+            foreach ($resultado as &$av) {
+                if (!isset($av['comentario']) && isset($av['texto_avaliacao'])) {
+                    $av['comentario'] = $av['texto_avaliacao']; 
+                }
+                if (!isset($av['data']) && isset($av['data_avaliacao'])) {
+                    $av['data'] = $av['data_avaliacao'];
+                }
+            
+                $av['comentarios'] = $av['comentarios'] ?? []; 
+            }
+        }
+        // ====================================================
 
         echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
-        return;
+        exit;
     }
 
+    // ===================== API: Salvar avaliação via AJAX
     public function apiSalvar(): void
     {
-        header('Content-Type: application/json; charset=UTF-8');
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'Método não permitido. Use POST.'
-            ], JSON_UNESCAPED_UNICODE);
-            return;
+            header('Location: index.php?url=home');
+            exit;
         }
 
+        
         if (!isset($_SESSION['usuario_id'])) {
-            http_response_code(401);
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'É necessário estar logado para enviar avaliações.'
-            ], JSON_UNESCAPED_UNICODE);
-            return;
+            header('Location: index.php?url=login'); 
+            exit;
         }
 
-        $midiaId = $_POST['midia_id'] ?? '';
-        $nota = isset($_POST['nota']) ? (float) $_POST['nota'] : 0;
+        $midiaId    = $_POST['midia_id'] ?? '';
+        $nota       = isset($_POST['nota']) ? (float) $_POST['nota'] : 0;
         $comentario = trim($_POST['comentario'] ?? '');
 
+        
         if (empty($midiaId) || $nota < 0.5 || $nota > 5 || empty($comentario)) {
-            http_response_code(400);
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'midia_id, nota (0.5 a 5) e comentario são obrigatórios.'
-            ], JSON_UNESCAPED_UNICODE);
-            return;
+        
+            header('Location: index.php?url=avaliacao&erro=dados_invalidos');
+            exit;
         }
-
-        $novaAvaliacao = [
-            'id' => time(),
-            'midia_id' => $midiaId,
-            'usuario_id' => $_SESSION['usuario_id'],
-            'usuario_nome' => $_SESSION['usuario_nome'] ?? 'Usuário',
-            'nota' => $nota,
-            'comentario' => $comentario,
-            'data' => date('d/m/Y H:i'),
-            'comentarios' => []
-        ];
 
         $model = new AvaliacaoModel();
+        
+        $dadosSalvar = [
+            'midia_id'   => $midiaId,
+            'usuario_id' => $_SESSION['usuario_id'],
+            'nota'       => $nota,
+            'comentario' => $comentario
+        ];
 
-        if (!$model->salvar($novaAvaliacao)) {
-            http_response_code(500);
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'Falha ao salvar a avaliação.'
-            ], JSON_UNESCAPED_UNICODE);
-            return;
+        try {
+            if (!$model->salvar($dadosSalvar)) {
+                header('Location: index.php?url=home&erro=falha_salvar');
+                exit;
+            }
+        } catch (\PDOException $e) {
+        
+            if ($e->getCode() === '23505') {
+                header('Location: index.php?url=home&erro=ja_avaliado');
+                exit;
+            }
+            
+            header('Location: index.php?url=home&erro=db');
+            exit;
         }
 
-        http_response_code(201);
-        echo json_encode([
-            'sucesso' => true,
-            'mensagem' => 'Avaliação enviada com sucesso.',
-            'avaliacao' => $novaAvaliacao
-        ], JSON_UNESCAPED_UNICODE);
-        return;
+        header('Location: index.php?url=home');
+        exit; 
     }
-
+    // ===================== API: Listar Comentários de uma Avaliação
     public function listarComentarios(): void
     {
         header('Content-Type: application/json; charset=UTF-8');
 
         $avaliacaoId = $_GET['avaliacao_id'] ?? '';
         if (empty($avaliacaoId)) {
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'Parâmetro avaliacao_id é obrigatório.'
-            ], JSON_UNESCAPED_UNICODE);
+            http_response_code(400);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Parâmetro avaliacao_id é obrigatório.'], JSON_UNESCAPED_UNICODE);
             return;
         }
 
         $model = new AvaliacaoModel();
-        $avaliacao = $model->obterPorId($avaliacaoId);
+        
+        
+        $sql = "SELECT c.id_comentario, c.conteudo as texto, c.data_comentario as data, u.nome as usuario_nome, u.id_usuario as usuario_id 
+                FROM comentario c 
+                INNER JOIN usuario u ON c.id_usuario = u.id_usuario 
+                WHERE c.id_avaliacao = :id_avaliacao 
+                ORDER BY c.data_comentario ASC";
+        
+        $db = \App\Models\Database::conectar();
+        $stmt = $db->prepare($sql);
+        $stmt->execute(['id_avaliacao' => $avaliacaoId]);
+        $comentarios = $stmt->fetchAll();
 
-        if (!$avaliacao) {
-            echo json_encode([], JSON_UNESCAPED_UNICODE);
-            return;
-        }
-
-        $comentarios = $avaliacao['comentarios'] ?? [];
         echo json_encode($comentarios, JSON_UNESCAPED_UNICODE);
         return;
     }
 
+    // ===================== API: Comentar via AJAX
     public function apiComentar(): void
     {
         header('Content-Type: application/json; charset=UTF-8');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'Método não permitido. Use POST.'
-            ], JSON_UNESCAPED_UNICODE);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Método não permitido. Use POST.'], JSON_UNESCAPED_UNICODE);
             return;
         }
 
         if (!isset($_SESSION['usuario_id'])) {
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'É necessário estar logado para enviar comentários.'
-            ], JSON_UNESCAPED_UNICODE);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'É necessário estar logado para enviar comentários.'], JSON_UNESCAPED_UNICODE);
             return;
         }
 
@@ -343,36 +366,81 @@ public function comentar(): void
         $texto = trim($_POST['comentario'] ?? '');
 
         if (empty($avaliacaoId) || empty($texto)) {
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'avaliacao_id e comentario são obrigatórios.'
-            ], JSON_UNESCAPED_UNICODE);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'avaliacao_id e comentario são obrigatórios.'], JSON_UNESCAPED_UNICODE);
             return;
         }
 
         $comentario = [
             'usuario_id' => $_SESSION['usuario_id'],
-            'usuario_nome' => $_SESSION['usuario_nome'] ?? 'Usuário',
-            'texto' => $texto,
-            'data' => date('d/m/Y H:i')
+            'comentario' => $texto
         ];
 
         $model = new AvaliacaoModel();
         $ok = $model->adicionarComentario($avaliacaoId, $comentario);
 
         if (!$ok) {
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'Falha ao salvar comentário.'
-            ], JSON_UNESCAPED_UNICODE);
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Falha ao salvar comentário no banco.'], JSON_UNESCAPED_UNICODE);
             return;
         }
 
         echo json_encode([
             'sucesso' => true,
-            'mensagem' => 'Comentário enviado com sucesso.',
-            'comentario' => $comentario
+            'mensagem' => 'Comentário enviado com sucesso.'
         ], JSON_UNESCAPED_UNICODE);
         return;
+    }
+    public function apiExcluirRapida() {
+
+    echo "<h1>[TESTE 1] Chegou no Controller!</h1>";
+    echo "<pre>Dados enviados pelo formulário (POST):<br>";
+    print_r($_POST);
+    echo "</pre>";
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Limpa buffers de saída para evitar quebras de cabeçalho
+        if (ob_get_length()) {
+            ob_clean();
+        }
+
+        // 1. Defesa preventiva: Se o usuário não estiver logado, barra a ação
+        if (!isset($_SESSION['usuario_id'])) {
+            header('Location: index.php?url=login');
+            exit;
+        }
+
+        // 2. Bloqueia acessos que não sejam via formulário POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?url=home');
+            exit;
+        }
+
+        // 3. Resgata o ID enviado pelo input hidden da View
+        $idAvaliacao = $_POST['id'] ?? '';
+        $idUsuarioLogado = $_SESSION['usuario_id'];
+        $tipoUsuarioLogado = $_SESSION['usuario_tipo'] ?? 'user';
+
+        if (empty($idAvaliacao)) {
+            header('Location: index.php?url=home&erro=id_invalido');
+            exit;
+        }
+
+        
+        $avaliacaoModel = new \App\Models\AvaliacaoModel();
+
+        
+        $excluiu = $avaliacaoModel->excluirAvaliacaoPorId($idAvaliacao, $idUsuarioLogado, $tipoUsuarioLogado);
+
+        if ($excluiu) {
+            
+            header('Location: index.php?url=home&sucesso=avaliacao_removida');
+            exit;
+        } else {
+            
+            header('Location: index.php?url=home&erro=sem_permissao');
+            exit;
+        }
     }
 }

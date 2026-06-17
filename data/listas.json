@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "nome": "favoritos",
+        "usuario_id": "user_69fa68226c9a3",
+        "data_criacao": "2026-06-02 17:18:22"
+    },
+    {
+        "id": 2,
+        "nome": "preferidos",
+        "usuario_id": "user_6a03cbe806509",
+        "data_criacao": "2026-06-02 17:52:15"
+    }
+]

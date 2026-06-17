@@ -12,7 +12,7 @@
         <h1>Nova Avaliação</h1>
         <p class="subtitulo">Escolha uma mídia e registre sua opinião</p>
 
-        <form id="avaliacaoForm" action="index.php?url=avaliacao/salvar" method="POST">
+        <form id="avaliacaoForm" action="index.php?url=api/avaliacoes/enviar" method="POST">
 
             <label for="midia_id">Qual mídia você quer avaliar?</label>
             <select name="midia_id" id="midia_id" required>
@@ -20,8 +20,8 @@
 
                 <?php if (!empty($midias)): ?>
                     <?php foreach ($midias as $midia): ?>
-                        <option value="<?= htmlspecialchars($midia['id']) ?>">
-                            <?= htmlspecialchars($midia['titulo']) ?> (<?= htmlspecialchars($midia['tipo']) ?>)
+                        <option value="<?= htmlspecialchars($midia['id_midia'] ?? $midia['id'] ?? '') ?>">
+                            <?= htmlspecialchars($midia['titulo']) ?> (<?= htmlspecialchars($midia['tipo_midia'] ?? $midia['tipo'] ?? 'Mídia') ?>)
                         </option>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -44,6 +44,16 @@
             <label for="comentario">Comentário</label>
             <textarea name="comentario" id="comentario" rows="4" required placeholder="Escreva sua opinião..."></textarea>
 
+            <?php if (isset($_GET['erro'])): ?>
+                <div id="mensagemApi" role="alert" style="margin-bottom:16px; color:#c0392b; font-weight: bold;">
+                    <?php 
+                        if ($_GET['erro'] === 'ja_avaliado') echo "Você já enviou uma avaliação para esta mídia.";
+                        else if ($_GET['erro'] === 'dados_invalidos') echo "Preencha todos os campos corretamente.";
+                        else echo "Erro ao processar a avaliação. Tente novamente.";
+                    ?>
+                </div>
+            <?php endif; ?>
+
             <button type="submit">Enviar Avaliação</button>
 
             <p class="text-center">
@@ -62,6 +72,7 @@
 </div>
 
 <script>
+    // O JavaScript agora serve EXCLUSIVAMENTE para a animação visual das estrelas clicadas
     const estrelas = document.querySelectorAll("#rating span");
     const inputNota = document.getElementById("nota");
     const selectMidia = document.getElementById("midia_id");
@@ -86,6 +97,7 @@
             }
         });
 
+        // Alimenta o <input type="hidden"> que o formulário vai enviar via POST
         inputNota.value = notaAtual > 0 ? notaAtual : "";
     }
 

@@ -25,15 +25,20 @@
 
         <?php
         $usuarioId = $_SESSION['usuario_id'] ?? 'visitante';
+        $usuarioTipo = $_SESSION['usuario_tipo'] ?? 'user';
 
         $likes = is_array($avaliacao['likes'] ?? null) ? $avaliacao['likes'] : [];
         $deslikes = is_array($avaliacao['deslikes'] ?? null) ? $avaliacao['deslikes'] : [];
 
         $jaCurtiu = in_array($usuarioId, $likes);
         $jaDescurtiu = in_array($usuarioId, $deslikes);
+
+        // Trava de segurança visual: Só o autor ou o admin podem ver as ações de gerenciar
+        $eDono = (isset($avaliacao['id_usuario']) && $avaliacao['id_usuario'] == $usuarioId);
+        $eAdmin = ($usuarioTipo === 'admin');
         ?>
 
-        <div class="acoes-avaliacao">
+        <div class="acoes-avaliacao" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
             <a class="btn-reacao like <?= $jaCurtiu ? 'ativo' : '' ?>" href="index.php?url=avaliacao/like&id=<?= urlencode($avaliacao['id']) ?>">
                 Gostei <span><?= count($likes) ?></span>
             </a>
@@ -42,9 +47,18 @@
                 Não gostei <span><?= count($deslikes) ?></span>
             </a>
 
-            <a class="btn btn-inline btn-secundario" href="index.php?url=avaliacao/editar&id=<?= urlencode($avaliacao['id']) ?>">
-                Editar
-            </a>
+            <?php if ($eDono || $eAdmin): ?>
+                <a class="btn btn-inline btn-secundario" href="index.php?url=avaliacao/editar&id=<?= urlencode($avaliacao['id']) ?>">
+                    Editar
+                </a>
+
+                <form action="index.php?url=apiExcluirRapida" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza absoluta que deseja excluir esta avaliação? Esta ação não pode ser desfeita.');">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($avaliacao['id']) ?>">
+                    <button type="submit" class="btn btn-inline" style="background-color: #dc3545; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                        Excluir
+                    </button>
+                </form>
+            <?php endif; ?>
         </div>
 
         <hr class="separador">
