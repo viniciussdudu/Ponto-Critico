@@ -8,7 +8,6 @@ use PHPMailer\PHPMailer\Exception;
 
 class EmailService {
     public static function enviar($destinatario, $assunto, $corpo) {
-        // Criamos apenas UM objeto
         $mail = new PHPMailer(true);
 
         try {
@@ -32,11 +31,9 @@ class EmailService {
             $mail->Subject = $assunto;
             $mail->Body    = $corpo;
             
-            // Envia o objeto que foi configurado!
             return $mail->send();
             
         } catch (Exception $e) {
-            // Se der erro, isso vai imprimir na tela por causa do exit
             echo "Erro ao enviar e-mail: {$mail->ErrorInfo}";
             exit; 
         }

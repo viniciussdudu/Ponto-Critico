@@ -22,6 +22,17 @@ Catálogo de Mídias: Sistema para registro e listagem de diferentes tipos de co
 
 Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críticas textuais vinculadas ao perfil do usuário.
 
+## 🔗 Links Úteis
+
+| Recurso | Link |
+|--------|------|
+| 🎥 Vídeo Demonstrativo | [vídeo](https://drive.google.com/file/d/1jz5t6644rvW_oxLb5JXZQP00z8dMuzuN/view?usp=sharing) |
+| 🌐 Sistema Online (Landing Page) | Preencha a página aqui |
+| 🏷️ Versão final | [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/V5.0) |
+| 📝 Apresentação Final | [Apresentação](docs/Apresentação%20final/Apresentação_Final_Ponto_Crítico.pdf) |
+<hr>
+
+
 ## Sprints
 
 [sprint 1](docs/Sprints/Sprint%201_%20Cadastro%20e%20avalia%C3%A7%C3%A3o%20das%20m%C3%ADdias%20pdf.pdf) : [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/v1.0)
@@ -38,10 +49,6 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
 
 [GitHub Projects](https://github.com/users/viniciussdudu/projects/1)
 
-## user Stories
-
-[User Stories](docs/User%20Stories)
-
 
 # Como Executar o Projeto Localmente
 
@@ -53,12 +60,6 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
    Navegue até a pasta `htdocs` do seu XAMPP (geralmente em `C:\xampp\htdocs\`) e clone o projeto:
    ```bash
    git clone https://github.com/viniciussdudu/Ponto-Critico.git
-
-
-
-
-
-
 3. Certifique-se de ter o Composer instalado.
        No Terminal digite:
      ```bash
@@ -73,6 +74,10 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
    * modifique o arquivo App/Models/Database.php com as suas configurações do PostgreSQL
 
 5. Abra o terminal do XAMPPP e clique em Start no Module Apache
+
+6. Configurar Envio de Email de Confirmações:
+   * Criar conta no Mailtrap.io
+   * modifique o arquivo App/Services/EmailService.php com as suas configurações do Mailtrap.io
 
 
 
