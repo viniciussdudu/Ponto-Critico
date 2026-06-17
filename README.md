@@ -27,11 +27,10 @@ Sistema de Avaliações: Funcionalidade core que permite atribuir notas e críti
 | Recurso | Link |
 |--------|------|
 | 🎥 Vídeo Demonstrativo | [vídeo](https://drive.google.com/file/d/1jz5t6644rvW_oxLb5JXZQP00z8dMuzuN/view?usp=sharing) |
-| 🌐 Sistema Online (Landing Page) | Preencha a página aqui |
+| 🌐 Sistema Online (Landing Page) | [Landing Page](https://viniciussdudu.github.io/Landing-Page-Ponto-Cr-tico/) |
 | 🏷️ Versão final | [Release](https://github.com/viniciussdudu/Ponto-Critico/releases/tag/V5.0) |
 | 📝 Apresentação Final | [Apresentação](docs/Apresentação%20final/Apresentação_Final_Ponto_Crítico.pdf) |
 <hr>
-
 
 ## Sprints
 
